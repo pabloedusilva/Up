@@ -641,99 +641,6 @@
             margin-bottom: 20px;
         }
 
-        /* Bot Reports Section */
-        .bot-reports-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 25px;
-            margin-top: 20px;
-        }
-
-        .bot-report-card {
-            background-color: var(--card-bg);
-            border-radius: 15px;
-            box-shadow: 0 5px 20px var(--shadow);
-            padding: 20px;
-            transition: all 0.3s ease;
-        }
-
-        .bot-report-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px var(--shadow);
-        }
-
-        .bot-report-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .bot-status-indicator {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            margin-right: 10px;
-        }
-
-        .bot-status-indicator.online {
-            background-color: var(--success);
-            box-shadow: 0 0 10px var(--success);
-        }
-
-        .bot-status-indicator.offline {
-            background-color: var(--error);
-            box-shadow: 0 0 10px var(--error);
-        }
-
-        .bot-report-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--text-primary);
-            flex: 1;
-        }
-
-        .bot-report-content {
-            max-height: 400px;
-            overflow-y: auto;
-            padding-right: 10px;
-        }
-
-        .connection-item {
-            padding: 12px 0;
-            border-bottom: 1px dashed var(--border);
-        }
-
-        .connection-item:last-child {
-            border-bottom: none;
-        }
-
-        .connection-time {
-            font-size: 13px;
-            color: var(--text-secondary);
-            margin-bottom: 5px;
-        }
-
-        .connection-details {
-            display: flex;
-            justify-content: space-between;
-            font-size: 14px;
-        }
-
-        .connection-type {
-            background-color: rgba(37, 211, 102, 0.1);
-            color: var(--primary);
-            padding: 3px 8px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 500;
-        }
-
-        .connection-duration {
-            color: var(--text-secondary);
-        }
-
         /* Modal styles */
         .modal-overlay {
             display: none;
@@ -997,9 +904,6 @@
                 width: 100%;
                 gap: 15px;
             }
-            .bot-reports-container {
-                grid-template-columns: 1fr;
-            }
         }
 
         @media (max-width: 576px) {
@@ -1133,8 +1037,16 @@
                     <h2 class="section-title">Relatórios de Conexão dos Bots</h2>
                 </div>
                 
-                <div class="bot-reports-container" id="botReportsContainer">
-                    <!-- Bot reports will be added here dynamically -->
+                <div class="bots-table">
+                    <div class="table-header">
+                        <div>Bot</div>
+                        <div>Status</div>
+                        <div>Última Conexão</div>
+                        <div>Última Desconexão</div>
+                    </div>
+                    <div id="botsList">
+                        <!-- Bots will be added here dynamically -->
+                    </div>
                 </div>
             </div>
         </div>
@@ -1191,420 +1103,354 @@
     </div>
 
     <script>
-              // Sample data - in a real app, this would come from a database
+        // Sample data - in a real app, this would come from a database
         let users = [];
         let currentUserId = null;
-        let isEditMode = false;
-        let darkMode = false;
+        let isDarkMode = false;
+        let currentSection = 'users-section';
+
+        // Sample bot data
+        const bots = [
+            {
+                id: 1,
+                name: "Bot 1",
+                status: "Online",
+                lastConnection: new Date(Date.now() - 3600000).toLocaleString(), // 1 hour ago
+                lastDisconnection: new Date(Date.now() - 7200000).toLocaleString() // 2 hours ago
+            },
+            {
+                id: 2,
+                name: "Bot 2",
+                status: "Offline",
+                lastConnection: new Date(Date.now() - 86400000).toLocaleString(), // 1 day ago
+                lastDisconnection: new Date(Date.now() - 43200000).toLocaleString() // 12 hours ago
+            },
+            {
+                id: 3,
+                name: "Bot 3",
+                status: "Online",
+                lastConnection: new Date(Date.now() - 1800000).toLocaleString(), // 30 minutes ago
+                lastDisconnection: "-"
+            }
+        ];
 
         // DOM Elements
         const sidebar = document.getElementById('sidebar');
         const sidebarOverlay = document.getElementById('sidebarOverlay');
-        const menuToggle = document.getElementById('menuToggle');
         const sidebarClose = document.getElementById('sidebarClose');
+        const menuToggle = document.getElementById('menuToggle');
         const themeToggle = document.getElementById('themeToggle');
-        const userModal = document.getElementById('userModal');
-        const modalClose = document.getElementById('modalClose');
-        const cancelBtn = document.getElementById('cancelBtn');
-        const saveBtn = document.getElementById('saveBtn');
-        const confirmModal = document.getElementById('confirmModal');
-        const confirmCancel = document.getElementById('confirmCancel');
-        const confirmDelete = document.getElementById('confirmDelete');
+        const userCount = document.getElementById('userCount');
+        const usersList = document.getElementById('usersList');
+        const botsList = document.getElementById('botsList');
         const addUserBtn = document.getElementById('addUserBtn');
         const addUserBtnEmpty = document.getElementById('addUserBtnEmpty');
         const searchInput = document.getElementById('searchInput');
-        const usersList = document.getElementById('usersList');
-        const userCount = document.getElementById('userCount');
+        
+        // Modal elements
+        const userModal = document.getElementById('userModal');
         const modalTitle = document.getElementById('modalTitle');
+        const modalClose = document.getElementById('modalClose');
+        const cancelBtn = document.getElementById('cancelBtn');
+        const saveBtn = document.getElementById('saveBtn');
+        
+        // Confirmation modal elements
+        const confirmModal = document.getElementById('confirmModal');
+        const confirmClose = document.getElementById('confirmClose');
+        const confirmCancel = document.getElementById('confirmCancel');
+        const confirmDelete = document.getElementById('confirmDelete');
+        
+        // Form inputs
         const userName = document.getElementById('userName');
         const userEmail = document.getElementById('userEmail');
         const userWhatsApp = document.getElementById('userWhatsApp');
         const userPassword = document.getElementById('userPassword');
+
+        // Section elements
+        const usersSection = document.getElementById('users-section');
+        const reportsSection = document.getElementById('reports-section');
         const menuItems = document.querySelectorAll('.menu-item');
-        const sections = document.querySelectorAll('.users-section, .reports-section');
-        const botReportsContainer = document.getElementById('botReportsContainer');
 
-        // Event Listeners
-        menuToggle.addEventListener('click', toggleSidebar);
-        sidebarClose.addEventListener('click', toggleSidebar);
-        sidebarOverlay.addEventListener('click', toggleSidebar);
-        themeToggle.addEventListener('click', toggleTheme);
-        addUserBtn.addEventListener('click', openAddUserModal);
-        addUserBtnEmpty.addEventListener('click', openAddUserModal);
-        modalClose.addEventListener('click', closeModal);
-        cancelBtn.addEventListener('click', closeModal);
-        saveBtn.addEventListener('click', saveUser);
-        confirmCancel.addEventListener('click', closeConfirmModal);
-        confirmDelete.addEventListener('click', deleteUser);
-        searchInput.addEventListener('input', filterUsers);
-
-        // Menu item click handlers
-        menuItems.forEach(item => {
-            item.addEventListener('click', (e) => {
-                e.preventDefault();
-                const sectionId = item.getAttribute('data-section');
-                showSection(sectionId);
-                
-                // Update active state
-                menuItems.forEach(i => i.classList.remove('active'));
-                item.classList.add('active');
-                
-                // Close sidebar on mobile
-                if (window.innerWidth < 992) {
-                    toggleSidebar();
-                }
-            });
-        });
-
-        // Initialize the app
-        function init() {
-            // Load sample data
-            loadSampleData();
-            
-            // Check for saved theme preference
-            const savedTheme = localStorage.getItem('theme');
-            if (savedTheme === 'dark') {
-                darkMode = true;
-                document.documentElement.setAttribute('data-theme', 'dark');
-                updateThemeIcon();
-            }
-            
-            // Render initial data
-            renderUsers();
-            renderBotReports();
-        }
-
-        // Load sample data
-        function loadSampleData() {
-            users = [
-                {
-                    id: 1,
-                    name: 'João Silva',
-                    email: 'joao.silva@example.com',
-                    phone: '+55 11 98765-4321',
-                    password: 'senha123'
-                },
-                {
-                    id: 2,
-                    name: 'Maria Oliveira',
-                    email: 'maria.oliveira@example.com',
-                    phone: '+55 21 99876-5432',
-                    password: 'senha123'
-                },
-                {
-                    id: 3,
-                    name: 'Carlos Souza',
-                    email: 'carlos.souza@example.com',
-                    phone: '+55 31 98765-1234',
-                    password: 'senha123'
-                }
-            ];
-        }
-
-        // Toggle sidebar visibility
-        function toggleSidebar() {
+        // Toggle sidebar
+        const toggleSidebar = () => {
             sidebar.classList.toggle('active');
             sidebarOverlay.classList.toggle('active');
-        }
+        };
 
-        // Toggle dark/light theme
-        function toggleTheme() {
-            darkMode = !darkMode;
-            
-            if (darkMode) {
-                document.documentElement.setAttribute('data-theme', 'dark');
-                localStorage.setItem('theme', 'dark');
-            } else {
-                document.documentElement.removeAttribute('data-theme');
-                localStorage.removeItem('theme');
-            }
-            
-            updateThemeIcon();
-        }
+        // Close sidebar
+        const closeSidebar = () => {
+            sidebar.classList.remove('active');
+            sidebarOverlay.classList.remove('active');
+        };
 
-        // Update theme toggle icon
-        function updateThemeIcon() {
-            const icon = themeToggle.querySelector('.theme-icon i');
-            if (darkMode) {
-                icon.classList.remove('fa-moon');
-                icon.classList.add('fa-sun');
-            } else {
-                icon.classList.remove('fa-sun');
-                icon.classList.add('fa-moon');
-            }
-        }
+        // Initialize the dashboard
+        const initDashboard = () => {
+            // Sidebar toggle events
+            menuToggle.addEventListener('click', toggleSidebar);
+            sidebarClose.addEventListener('click', closeSidebar);
+            sidebarOverlay.addEventListener('click', closeSidebar);
 
-        // Show specific section
-        function showSection(sectionId) {
-            sections.forEach(section => {
-                if (section.id === sectionId) {
-                    section.classList.add('active');
-                    
-                    // Special handling for reports section
-                    if (sectionId === 'reports-section') {
-                        renderBotReports();
-                    }
-                } else {
-                    section.classList.remove('active');
-                }
+            // Theme toggle
+            themeToggle.addEventListener('click', () => {
+                isDarkMode = !isDarkMode;
+                document.body.setAttribute('data-theme', isDarkMode ? 'dark' : '');
+                const icon = themeToggle.querySelector('.theme-icon i');
+                icon.className = isDarkMode ? 'fas fa-sun' : 'fas fa-moon';
+                
+                // Save preference to localStorage
+                localStorage.setItem('darkMode', isDarkMode);
             });
-        }
+
+            // Check for saved theme preference
+            if (localStorage.getItem('darkMode') === 'true') {
+                isDarkMode = true;
+                document.body.setAttribute('data-theme', 'dark');
+                const icon = themeToggle.querySelector('.theme-icon i');
+                icon.className = 'fas fa-sun';
+            }
+
+            // Switch between sections
+            menuItems.forEach(item => {
+                item.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const sectionId = item.getAttribute('data-section');
+                    
+                    // Update active menu item
+                    menuItems.forEach(i => i.classList.remove('active'));
+                    item.classList.add('active');
+                    
+                    // Update current section
+                    currentSection = sectionId;
+                    
+                    // Hide all sections
+                    document.querySelectorAll('.users-section, .reports-section').forEach(section => {
+                        section.classList.remove('active');
+                    });
+                    
+                    // Show selected section
+                    document.getElementById(sectionId).classList.add('active');
+                    
+                    // Update page title
+                    const pageTitle = document.querySelector('.page-title');
+                    if (sectionId === 'users-section') {
+                        pageTitle.textContent = 'Gerenciamento de Usuários';
+                    } else if (sectionId === 'reports-section') {
+                        pageTitle.textContent = 'Relatórios de Bots';
+                    }
+
+                    // Close sidebar on mobile
+                    if (window.innerWidth < 992) {
+                        closeSidebar();
+                    }
+                });
+            });
+
+            // Open add user modal
+            addUserBtn.addEventListener('click', openAddUserModal);
+            addUserBtnEmpty.addEventListener('click', openAddUserModal);
+            modalClose.addEventListener('click', closeModals);
+            cancelBtn.addEventListener('click', closeModals);
+            confirmClose.addEventListener('click', closeModals);
+            confirmCancel.addEventListener('click', closeModals);
+
+            // Close modal when clicking outside
+            window.addEventListener('click', (e) => {
+                if (e.target === userModal) closeModals();
+                if (e.target === confirmModal) closeModals();
+            });
+
+            // Save user
+            saveBtn.addEventListener('click', saveUser);
+
+            // Search users
+            searchInput.addEventListener('input', filterUsers);
+
+            // Initial render
+            renderUsers();
+            renderBots();
+        };
 
         // Open add user modal
-        function openAddUserModal() {
-            isEditMode = false;
+        const openAddUserModal = () => {
             currentUserId = null;
             modalTitle.textContent = 'Adicionar Novo Usuário';
-            
-            // Clear form
             userName.value = '';
             userEmail.value = '';
             userWhatsApp.value = '';
             userPassword.value = '';
-            
-            // Show modal
             userModal.classList.add('active');
-        }
+        };
 
         // Open edit user modal
-        function openEditUserModal(userId) {
+        const openEditUserModal = (userId) => {
             const user = users.find(u => u.id === userId);
-            if (!user) return;
-            
-            isEditMode = true;
-            currentUserId = userId;
-            modalTitle.textContent = 'Editar Usuário';
-            
-            // Fill form with user data
-            userName.value = user.name;
-            userEmail.value = user.email;
-            userWhatsApp.value = user.phone;
-            userPassword.value = user.password;
-            
-            // Show modal
-            userModal.classList.add('active');
-        }
+            if (user) {
+                currentUserId = user.id;
+                modalTitle.textContent = 'Editar Usuário';
+                userName.value = user.name;
+                userEmail.value = user.email;
+                userWhatsApp.value = user.whatsapp;
+                userPassword.value = '';
+                userModal.classList.add('active');
+            }
+        };
 
-        // Close modal
-        function closeModal() {
-            userModal.classList.remove('active');
-        }
-
-        // Save user (add or edit)
-        function saveUser() {
-            // Validate form
-            if (!userName.value || !userEmail.value || !userWhatsApp.value || !userPassword.value) {
-                alert('Por favor, preencha todos os campos.');
+        // Save user
+        const saveUser = () => {
+            if (!userName.value || !userEmail.value || !userWhatsApp.value) {
+                alert('Por favor, preencha todos os campos obrigatórios');
                 return;
             }
-            
-            if (isEditMode) {
-                // Update existing user
+
+            if (currentUserId) {
+                // Edit existing user
                 const userIndex = users.findIndex(u => u.id === currentUserId);
                 if (userIndex !== -1) {
                     users[userIndex] = {
-                        id: currentUserId,
+                        ...users[userIndex],
                         name: userName.value,
                         email: userEmail.value,
-                        phone: userWhatsApp.value,
-                        password: userPassword.value
+                        whatsapp: userWhatsApp.value,
+                        ...(userPassword.value && { password: userPassword.value })
                     };
                 }
             } else {
                 // Add new user
-                const newId = users.length > 0 ? Math.max(...users.map(u => u.id)) + 1 : 1;
-                users.push({
-                    id: newId,
+                const newUser = {
+                    id: Date.now().toString(),
                     name: userName.value,
                     email: userEmail.value,
-                    phone: userWhatsApp.value,
-                    password: userPassword.value
-                });
+                    whatsapp: userWhatsApp.value,
+                    password: userPassword.value || 'default123',
+                    createdAt: new Date().toISOString()
+                };
+                users.unshift(newUser);
             }
-            
-            // Update UI
+
             renderUsers();
-            closeModal();
-        }
+            closeModals();
+        };
 
-        // Open confirmation modal for delete
-        function openConfirmModal(userId) {
-            currentUserId = userId;
-            confirmModal.classList.add('active');
-        }
-
-        // Close confirmation modal
-        function closeConfirmModal() {
+        // Close modals
+        const closeModals = () => {
+            userModal.classList.remove('active');
             confirmModal.classList.remove('active');
-        }
+        };
 
         // Delete user
-        function deleteUser() {
-            users = users.filter(user => user.id !== currentUserId);
-            renderUsers();
-            closeConfirmModal();
-        }
+        let userToDelete = null;
 
-        // Filter users based on search input
-        function filterUsers() {
+        const openDeleteConfirm = (userId) => {
+            userToDelete = userId;
+            confirmModal.classList.add('active');
+        };
+
+        const deleteUser = () => {
+            if (userToDelete) {
+                users = users.filter(u => u.id !== userToDelete);
+                renderUsers();
+                closeModals();
+                userToDelete = null;
+            }
+        };
+
+        // Filter users by name or phone
+        const filterUsers = () => {
             const searchTerm = searchInput.value.toLowerCase();
-            renderUsers(searchTerm);
-        }
+            const filteredUsers = searchTerm 
+                ? users.filter(user => 
+                    user.name.toLowerCase().includes(searchTerm) || 
+                    user.whatsapp.toLowerCase().includes(searchTerm))
+                : users;
+
+            renderUsers(filteredUsers);
+        };
 
         // Render users list
-        function renderUsers(searchTerm = '') {
-            let filteredUsers = users;
-            
-            if (searchTerm) {
-                filteredUsers = users.filter(user => 
-                    user.name.toLowerCase().includes(searchTerm) || 
-                    user.phone.toLowerCase().includes(searchTerm)
-            }
-            
-            // Update user count
-            userCount.textContent = filteredUsers.length;
-            
-            if (filteredUsers.length === 0) {
+        const renderUsers = (filteredUsers = users) => {
+            if (filteredUsers.length === 0 && users.length === 0) {
                 usersList.innerHTML = `
                     <div class="empty-state">
                         <div class="empty-icon">
                             <i class="fas fa-users"></i>
                         </div>
-                        <div class="empty-text">Nenhum usuário encontrado</div>
+                        <div class="empty-text">Nenhum usuário cadastrado</div>
                         <button class="add-user-btn" id="addUserBtnEmpty">
                             <i class="fas fa-plus"></i>
-                            Adicionar Novo Usuário
+                            Adicionar Primeiro Usuário
                         </button>
                     </div>
                 `;
                 document.getElementById('addUserBtnEmpty').addEventListener('click', openAddUserModal);
-                return;
-            }
-            
-            // Generate users table
-            let usersHTML = `
-                <div class="table-header">
-                    <div>ID</div>
-                    <div>Usuário</div>
-                    <div>Contato</div>
-                    <div>Ações</div>
-                </div>
-            `;
-            
-            filteredUsers.forEach(user => {
-                const initials = user.name.split(' ').map(n => n[0]).join('').toUpperCase();
-                
-                usersHTML += `
-                    <div class="table-row">
-                        <div>${user.id}</div>
-                        <div class="user-info">
-                            <div class="user-avatar">${initials}</div>
-                            <div>
-                                <div class="user-name">${user.name}</div>
-                                <div class="user-email">${user.email}</div>
-                            </div>
-                        </div>
-                        <div class="user-phone">${user.phone}</div>
-                        <div class="action-buttons">
-                            <button class="edit-btn" onclick="openEditUserModal(${user.id})">
-                                <i class="fas fa-edit"></i>
-                                Editar
-                            </button>
-                            <button class="delete-btn" onclick="openConfirmModal(${user.id})">
-                                <i class="fas fa-trash"></i>
-                                Excluir
-                            </button>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            usersList.innerHTML = usersHTML;
-        }
-
-        // Generate sample bot reports
-        function generateBotReports() {
-            const statuses = ['online', 'offline'];
-            const types = ['API', 'Webhook', 'Chat', 'Integração'];
-            
-            return Array.from({ length: 5 }, (_, i) => {
-                const connections = Array.from({ length: Math.floor(Math.random() * 5) + 3 }, (_, j) => {
-                    const hours = Math.floor(Math.random() * 12);
-                    const minutes = Math.floor(Math.random() * 60);
-                    const duration = Math.floor(Math.random() * 120) + 1;
-                    
-                    return {
-                        time: `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`,
-                        type: types[Math.floor(Math.random() * types.length)],
-                        duration: `${duration} min`
-                    };
-                });
-                
-                return {
-                    id: i + 1,
-                    name: `Bot ${String.fromCharCode(65 + i)}`,
-                    status: statuses[Math.floor(Math.random() * statuses.length)],
-                    connections
-                };
-            });
-        }
-
-        // Render bot reports
-        function renderBotReports() {
-            const reports = generateBotReports();
-            
-            if (reports.length === 0) {
-                botReportsContainer.innerHTML = `
+            } else if (filteredUsers.length === 0) {
+                usersList.innerHTML = `
                     <div class="empty-state">
                         <div class="empty-icon">
-                            <i class="fas fa-robot"></i>
+                            <i class="fas fa-search"></i>
                         </div>
-                        <div class="empty-text">Nenhum relatório de bot disponível</div>
+                        <div class="empty-text">Nenhum usuário encontrado</div>
                     </div>
                 `;
-                return;
-            }
-            
-            let reportsHTML = '';
-            
-            reports.forEach(report => {
-                let connectionsHTML = '';
-                
-                report.connections.forEach(conn => {
-                    connectionsHTML += `
-                        <div class="connection-item">
-                            <div class="connection-time">${conn.time}</div>
-                            <div class="connection-details">
-                                <span class="connection-type">${conn.type}</span>
-                                <span class="connection-duration">${conn.duration}</span>
+            } else {
+                usersList.innerHTML = `
+                    <div class="table-header">
+                        <div>Usuário</div>
+                        <div>E-mail</div>
+                        <div>WhatsApp</div>
+                        <div>Ações</div>
+                    </div>
+                    ${filteredUsers.map(user => `
+                        <div class="table-row" data-id="${user.id}">
+                            <div class="user-info">
+                                <div class="user-avatar">${user.name.charAt(0).toUpperCase()}</div>
+                                <div>
+                                    <div class="user-name">${user.name}</div>
+                                    <div class="user-email">${user.email}</div>
+                                </div>
+                            </div>
+                            <div class="user-email">${user.email}</div>
+                            <div class="user-phone">${user.whatsapp}</div>
+                            <div class="action-buttons">
+                                <button class="edit-btn" onclick="openEditUserModal('${user.id}')">
+                                    <i class="fas fa-edit"></i> Editar
+                                </button>
+                                <button class="delete-btn" onclick="openDeleteConfirm('${user.id}')">
+                                    <i class="fas fa-trash"></i> Excluir
+                                </button>
                             </div>
                         </div>
-                    `;
-                });
-                
-                reportsHTML += `
-                    <div class="bot-report-card">
-                        <div class="bot-report-header">
-                            <div class="bot-status-indicator ${report.status}"></div>
-                            <div class="bot-report-title">${report.name}</div>
-                            <div class="connection-type">${report.status === 'online' ? 'Online' : 'Offline'}</div>
-                        </div>
-                        <div class="bot-report-content">
-                            ${connectionsHTML}
-                        </div>
-                    </div>
+                    `).join('')}
                 `;
-            });
-            
-            botReportsContainer.innerHTML = reportsHTML;
-        }
+            }
 
-        // Make functions available globally for inline event handlers
+            // Update user count
+            userCount.textContent = users.length;
+        };
+
+        // Render bots list
+        const renderBots = () => {
+            botsList.innerHTML = bots.map(bot => `
+                <div class="table-row" data-id="${bot.id}">
+                    <div class="bot-info">
+                        <div class="bot-avatar">${bot.id}</div>
+                        <div class="bot-name">${bot.name}</div>
+                    </div>
+                    <div>
+                        <span class="bot-status" style="color: ${bot.status === 'Online' ? 'var(--success)' : 'var(--error)'};">${bot.status}</span>
+                    </div>
+                    <div class="bot-time">${bot.lastConnection}</div>
+                    <div class="bot-time">${bot.lastDisconnection}</div>
+                </div>
+            `).join('');
+        };
+
+        // Make functions globally available
         window.openEditUserModal = openEditUserModal;
-        window.openConfirmModal = openConfirmModal;
+        window.openDeleteConfirm = openDeleteConfirm;
+        window.deleteUser = deleteUser;
 
-        // Initialize the app when DOM is loaded
-        document.addEventListener('DOMContentLoaded', init);
+        // Initialize the dashboard when the page loads
+        document.addEventListener('DOMContentLoaded', initDashboard);
     </script>
 </body>
 </html>
