@@ -1100,10 +1100,295 @@
                 margin-bottom: 10px;
             }
         }
+        
+        .share-link-container-modern {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+            background: var(--gray);
+            border-radius: 16px;
+            padding: 28px 32px 22px 32px;
+            margin: 26px 0 0 0;
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.07);
+            position: relative;
+            max-width: 540px;
+        }
+        
+        .share-link-label {
+            font-size: 1.08rem;
+            color: var(--light-blue);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 9px;
+            letter-spacing: 0.01em;
+        }
+        
+        .share-link-field {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            gap: 0;
+            position: relative;
+        }
+        
+        .share-link-input-modern {
+            border: none;
+            border-radius: 10px 0 0 10px;
+            padding: 14px 16px;
+            font-size: 1.12rem;
+            background: var(--light-gray);
+            color: var(--light-blue);
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+            outline: none;
+            width: 100%;
+            font-family: 'Inter', Arial, sans-serif;
+            letter-spacing: 0.01em;
+            transition: box-shadow 0.2s;
+        }
+        
+        .share-link-input-modern:focus {
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.10);
+        }
+        
+        .btn-copy-modern {
+            background: linear-gradient(135deg, #2563eb 60%, #1e40af 100%);
+            color: #fff;
+            border: none;
+            border-radius: 0 10px 10px 0;
+            width: 54px;
+            height: 48px;
+            font-size: 1.45rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.10);
+            cursor: pointer;
+            transition: background 0.18s, box-shadow 0.18s, transform 0.12s;
+            margin-left: -2px;
+        }
+        
+        .btn-copy-modern:hover,
+        .btn-copy-modern:focus {
+            background: linear-gradient(135deg, #1e40af 80%, #2563eb 100%);
+            box-shadow: 0 4px 16px rgba(37, 99, 235, 0.16);
+            transform: scale(1.07);
+        }
+        
+        .copy-success-modern {
+            position: absolute;
+            right: 38px;
+            bottom: 10px;
+            background: #e6f9ed;
+            color: #22c55e;
+            font-size: 1rem;
+            border-radius: 8px;
+            padding: 7px 16px 7px 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 1px 6px rgba(34, 197, 94, 0.07);
+            animation: fadeInCopySuccess 0.3s;
+            z-index: 2;
+            font-weight: 500;
+        }
+        
+        @keyframes fadeInCopySuccess {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @media (max-width: 700px) {
+            .share-link-container-modern {
+                max-width: 100%;
+                padding: 16px 8px 14px 8px;
+            }
+            .copy-success-modern {
+                right: 12px;
+                bottom: 4px;
+                font-size: 0.97rem;
+            }
+            .btn-copy-modern {
+                width: 46px;
+                height: 42px;
+                font-size: 1.18rem;
+            }
+            .share-link-input-modern {
+                font-size: 1rem;
+                padding: 10px 10px;
+            }
+        }
+        
+        .special-days-off-list {
+            margin-top: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .special-day-off-item {
+            background: var(--light-gray);
+            border-radius: 8px;
+            padding: 14px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+            font-size: 1rem;
+            color: var(--text-color);
+            gap: 12px;
+        }
+        
+        .special-day-off-date {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            color: var(--blue);
+        }
+        
+        .special-day-off-reason {
+            color: var(--dark-gray);
+            font-size: 0.98rem;
+            opacity: 0.8;
+        }
+        
+        .special-day-off-remove {
+            background: var(--red);
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 34px;
+            height: 34px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background 0.18s, box-shadow 0.18s;
+            box-shadow: 0 1px 6px rgba(196, 30, 58, 0.07);
+        }
+        
+        .special-day-off-remove:hover {
+            background: #a3162d;
+        }
+        
+        .special-day-off-empty {
+            color: var(--dark-gray);
+            opacity: 0.7;
+            font-size: 1rem;
+            padding: 12px 0 0 2px;
+        }
+        
+        .service-gallery {
+            display: flex;
+            gap: 16px;
+            margin-top: 8px;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+        }
+        
+        .gallery-option {
+            border: 2px solid transparent;
+            border-radius: 10px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            background: var(--light-gray);
+            width: 68px;
+            height: 68px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .gallery-option.selected {
+            border-color: var(--blue);
+            box-shadow: 0 4px 14px rgba(26, 75, 140, 0.10);
+        }
+        
+        .gallery-option img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            border-radius: 8px;
+            transition: transform 0.18s;
+        }
+        
+        .gallery-option:hover img {
+            transform: scale(1.07);
+        }
+        
+        .gallery-option .gallery-none-img {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f3f3f3;
+            color: #b0b0b0;
+            font-size: 2rem;
+        }
+        
+        .gallery-option[data-img="none"].selected {
+            border-color: none;
+            box-shadow: 0 4px 14px rgba(160, 160, 160, 0.10);
+        }
+        
+        @media (max-width: 600px) {
+            .service-gallery {
+                gap: 10px;
+            }
+            .gallery-option {
+                width: 54px;
+                height: 54px;
+            }
+        }
+        
+        .global-copy-success {
+            position: fixed;
+            top: 32px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #e6f9ed;
+            color: #22c55e;
+            font-size: 1.08rem;
+            border-radius: 10px;
+            padding: 12px 32px 12px 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 18px rgba(34, 197, 94, 0.13);
+            font-weight: 600;
+            z-index: 9999;
+            animation: fadeInCopySuccess 0.3s;
+        }
+        
+        @media (max-width: 600px) {
+            .global-copy-success {
+                font-size: 0.98rem;
+                padding: 10px 12px 10px 12px;
+                top: 16px;
+            }
+        }
     </style>
 </head>
 
 <body>
+    <div id="globalCopySuccessMsg" class="global-copy-success" style="display:none;">
+        <i class="fas fa-check-circle"></i> Link copiado!
+    </div>
     <header>
         <div class="container">
             <nav class="navbar">
@@ -1130,10 +1415,14 @@
             <div class="stats-container">
                 <div class="stat-card">
                     <div class="stat-value" id="today-appointments">5</div>
-                    <div class="stat-label">Agendamentos hoje</div>
+                    <div class="stat-label">Agendamentos de hoje</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-value" id="total-appointments">24</div>
+                    <div class="stat-label">Agendamentos do mês</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="total-appointments">48</div>
                     <div class="stat-label">Agendamentos totais</div>
                 </div>
             </div>
@@ -1252,42 +1541,23 @@
 
         <section class="dashboard-section animate-slide-up">
             <div class="card-header">
-                <h2 class="section-title"><i class="fas fa-user-tie"></i> Profissionais</h2>
-                <button class="edit-btn" id="addProfessionalBtn">
-                    <i class="fas fa-plus"></i> Adicionar
-                </button>
+                <h2 class="section-title"><i class="fas fa-share-alt"></i> Compartilhar Link de Agendamento</h2>
             </div>
-
-            <div class="professionals-container">
-                <div class="professional-card">
-                    <div class="professional-avatar">
-                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Jhonata Barber">
+            <div class="share-link-container-modern">
+                <div class="share-link-info">
+                    <div class="share-link-label">
+                        <i class="fas fa-link"></i> Link para agendamento online
                     </div>
-                    <div class="professional-name">Jhonata Barber</div>
-                    <div class="professional-actions">
-                        <button class="action-btn" title="Editar">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="action-btn delete-btn" title="Remover">
-                            <i class="fas fa-trash"></i>
+                    <div class="share-link-field">
+                        <input type="text" id="bookingLink" class="share-link-input-modern" readonly value="https://seusite.com/agendar" />
+                        <button class="btn-copy-modern" id="copyBookingLinkBtn" title="Copiar link">
+                            <i class="fas fa-copy"></i>
                         </button>
                     </div>
                 </div>
-
-                <div class="professional-card">
-                    <div class="professional-avatar">
-                        <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Maria Oliveira">
-                    </div>
-                    <div class="professional-name">Maria Oliveira</div>
-                    <div class="professional-actions">
-                        <button class="action-btn" title="Editar">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="action-btn delete-btn" title="Remover">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                </div>
+                <span class="copy-success-modern" id="copySuccessMsg" style="display:none;">
+                    <i class="fas fa-check-circle"></i> Link copiado!
+                </span>
             </div>
         </section>
 
@@ -1415,6 +1685,21 @@
 
         <section class="dashboard-section animate-slide-up">
             <div class="card-header">
+                <h2 class="section-title"><i class="fas fa-calendar-times"></i> Dias Especiais de Folga</h2>
+                <button class="edit-btn" id="addDayOffBtn">
+                    <i class="fas fa-plus"></i> Adicionar Dia de Folga
+                </button>
+            </div>
+            <div class="special-days-off-list" id="specialDaysOffList">
+                <!-- Dias de folga adicionados aparecerão aqui -->
+                <div class="special-day-off-empty" id="specialDayOffEmpty">
+                    Nenhum dia de folga especial cadastrado.
+                </div>
+            </div>
+        </section>
+
+        <section class="dashboard-section animate-slide-up">
+            <div class="card-header">
                 <h2 class="section-title"><i class="fas fa-store"></i> Informações da Barbearia</h2>
                 <button class="edit-btn" id="editBarbershopInfoBtn">
                     <i class="fas fa-edit"></i> Editar
@@ -1528,12 +1813,59 @@
                             <label class="form-label">Preço (R$)</label>
                             <input type="text" class="form-control" placeholder="Ex: 45.00">
                         </div>
+                        <div class="form-group">
+                            <label class="form-label">Escolha uma imagem para o serviço</label>
+                            <div class="service-gallery">
+                                <div class="gallery-option selected" data-img="none" title="Nenhuma imagem">
+                                    <div class="gallery-none-img">
+                                        <i class="fas fa-ban"></i>
+                                    </div>
+                                </div>
+                                <div class="gallery-option" data-img="img/servicos/corte-masculino.jpg">
+                                    <img src="img/servicos/corte-masculino.jpg" alt="Corte Masculino">
+                                </div>
+                                <div class="gallery-option" data-img="img/servicos/barba.jpg">
+                                    <img src="img/servicos/barba.jpg" alt="Barba">
+                                </div>
+                                <div class="gallery-option" data-img="img/servicos/colorimetria.jpg">
+                                    <img src="img/servicos/colorimetria.jpg" alt="Colorimetria">
+                                </div>
+                                <div class="gallery-option" data-img="img/servicos/sobrancelha.jpg">
+                                    <img src="img/servicos/sobrancelha.jpg" alt="Sobrancelha">
+                                </div>
+                                <!-- Adicione mais imagens conforme desejar -->
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-secondary close-modal">Cancelar</button>
                 <button class="btn btn-primary">Salvar Alterações</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para adicionar dia de folga especial -->
+    <div id="addDayOffModal" class="modal">
+        <div class="modal-content" style="max-width: 370px;">
+            <div class="modal-header">
+                <h3 class="modal-title"><i class="fas fa-calendar-plus"></i> Adicionar Dia de Folga</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label" for="dayOffDate">Selecione o dia:</label>
+                    <input type="date" class="form-control" id="dayOffDate" min="">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="dayOffReason">Motivo (opcional):</label>
+                    <input type="text" class="form-control" id="dayOffReason" placeholder="Ex: Feriado, evento, etc.">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary close-modal">Cancelar</button>
+                <button class="btn btn-primary" id="saveDayOffBtn">Adicionar</button>
             </div>
         </div>
     </div>
@@ -1921,19 +2253,6 @@
                         </li>
                     </ul>
                 </div>
-
-                <div class="footer-barber">
-                    <h3 class="footer-title">Barbeiro</h3>
-                    <ul class="footer-links">
-                        <li>
-                            <i class="fas fa-user-shield"></i> Gerencie agendamentos, profissionais e horários.
-                        </li>
-                    </ul>
-                    <a href="/barbeiro" class="footer-admin-link-modern">
-                        <span>Área do barbeiro</span>
-                        <i class="fas fa-arrow-right"></i>
-                    </a>
-                </div>
             </div>
 
             <div class="footer-bottom">
@@ -1946,139 +2265,140 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Toggle theme
-            const themeToggle = document.getElementById('themeToggle');
-            const themeIcon = themeToggle.querySelector('i');
+                    // Toggle theme
+                    const themeToggle = document.getElementById('themeToggle');
+                    const themeIcon = themeToggle.querySelector('i');
 
-            // Verificar preferência de tema no localStorage
-            const currentTheme = localStorage.getItem('theme') || 'light';
-            if (currentTheme === 'dark') {
-                document.body.classList.add('dark-mode');
-                themeIcon.classList.remove('fa-moon');
-                themeIcon.classList.add('fa-sun');
-            }
+                    // Verificar preferência de tema no localStorage
+                    const currentTheme = localStorage.getItem('theme') || 'light';
+                    if (currentTheme === 'dark') {
+                        document.body.classList.add('dark-mode');
+                        themeIcon.classList.remove('fa-moon');
+                        themeIcon.classList.add('fa-sun');
+                    }
 
-            // Alternar tema
-            themeToggle.addEventListener('click', function() {
-                document.body.classList.toggle('dark-mode');
+                    // Alternar tema
+                    themeToggle.addEventListener('click', function() {
+                        document.body.classList.toggle('dark-mode');
 
-                if (document.body.classList.contains('dark-mode')) {
-                    themeIcon.classList.remove('fa-moon');
-                    themeIcon.classList.add('fa-sun');
-                    localStorage.setItem('theme', 'dark');
-                } else {
-                    themeIcon.classList.remove('fa-sun');
-                    themeIcon.classList.add('fa-moon');
-                    localStorage.setItem('theme', 'light');
-                }
-            });
-
-            // Modal functionality
-            const modals = document.querySelectorAll('.modal');
-            const modalTriggers = {
-                'editServicesBtn': 'editServicesModal',
-                'addProfessionalBtn': 'addProfessionalModal',
-                'editWorkingHoursBtn': 'editWorkingHoursModal',
-                'editBarbershopInfoBtn': 'editBarbershopInfoModal',
-                'viewAllAppointments': 'allAppointmentsModal'
-            };
-
-            // Open modals
-            Object.keys(modalTriggers).forEach(triggerId => {
-                const trigger = document.getElementById(triggerId);
-                const modalId = modalTriggers[triggerId];
-                const modal = document.getElementById(modalId);
-
-                if (trigger && modal) {
-                    trigger.addEventListener('click', () => {
-                        modal.style.display = 'flex';
+                        if (document.body.classList.contains('dark-mode')) {
+                            themeIcon.classList.remove('fa-moon');
+                            themeIcon.classList.add('fa-sun');
+                            localStorage.setItem('theme', 'dark');
+                        } else {
+                            themeIcon.classList.remove('fa-sun');
+                            themeIcon.classList.add('fa-moon');
+                            localStorage.setItem('theme', 'light');
+                        }
                     });
-                }
-            });
 
-            // Close modals
-            document.querySelectorAll('.close-modal').forEach(closeBtn => {
-                closeBtn.addEventListener('click', function() {
-                    const modal = this.closest('.modal');
-                    modal.style.display = 'none';
-                });
-            });
+                    // Modal functionality
+                    const modals = document.querySelectorAll('.modal');
+                    const modalTriggers = {
+                        'editServicesBtn': 'editServicesModal',
+                        'addProfessionalBtn': 'addProfessionalModal',
+                        'editWorkingHoursBtn': 'editWorkingHoursModal',
+                        'editBarbershopInfoBtn': 'editBarbershopInfoModal',
+                        'viewAllAppointments': 'allAppointmentsModal',
+                        'addDayOffBtn': 'addDayOffModal'
+                    };
 
-            // Close when clicking outside modal content
-            modals.forEach(modal => {
-                modal.addEventListener('click', function(e) {
-                    if (e.target === modal) {
-                        modal.style.display = 'none';
+                    // Open modals
+                    Object.keys(modalTriggers).forEach(triggerId => {
+                        const trigger = document.getElementById(triggerId);
+                        const modalId = modalTriggers[triggerId];
+                        const modal = document.getElementById(modalId);
+
+                        if (trigger && modal) {
+                            trigger.addEventListener('click', () => {
+                                modal.style.display = 'flex';
+                            });
+                        }
+                    });
+
+                    // Close modals
+                    document.querySelectorAll('.close-modal').forEach(closeBtn => {
+                        closeBtn.addEventListener('click', function() {
+                            const modal = this.closest('.modal');
+                            modal.style.display = 'none';
+                        });
+                    });
+
+                    // Close when clicking outside modal content
+                    modals.forEach(modal => {
+                        modal.addEventListener('click', function(e) {
+                            if (e.target === modal) {
+                                modal.style.display = 'none';
+                            }
+                        });
+                    });
+
+                    // Tab functionality
+                    document.querySelectorAll('.tab').forEach(tab => {
+                        tab.addEventListener('click', function() {
+                            const tabContainer = this.closest('.tab-container');
+                            const tabId = this.getAttribute('data-tab');
+
+                            // Remove active class from all tabs and contents
+                            tabContainer.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                            tabContainer.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+                            // Add active class to clicked tab and corresponding content
+                            this.classList.add('active');
+                            document.getElementById(`${tabId}-tab`).classList.add('active');
+                        });
+                    });
+
+                    // Avatar upload preview
+                    const avatarInput = document.getElementById('avatarInput');
+                    const avatarPreview = document.querySelector('.avatar-preview');
+
+                    if (avatarInput && avatarPreview) {
+                        document.querySelector('.avatar-upload-btn').addEventListener('click', function() {
+                            avatarInput.click();
+                        });
+
+                        avatarInput.addEventListener('change', function(e) {
+                            const file = e.target.files[0];
+                            if (file) {
+                                const reader = new FileReader();
+                                reader.onload = function(event) {
+                                    avatarPreview.innerHTML = `<img src="${event.target.result}" alt="Preview">`;
+                                };
+                                reader.readAsDataURL(file);
+                            }
+                        });
                     }
-                });
-            });
 
-            // Tab functionality
-            document.querySelectorAll('.tab').forEach(tab => {
-                tab.addEventListener('click', function() {
-                    const tabContainer = this.closest('.tab-container');
-                    const tabId = this.getAttribute('data-tab');
+                    // Avatar upload preview para foto do estabelecimento
+                    const barbershopPhotoInput = document.getElementById('barbershopPhotoInput');
+                    const barbershopPhotoBtn = document.getElementById('barbershop-photo-btn');
+                    const barbershopPhotoPreview = document.getElementById('barbershop-photo-preview');
 
-                    // Remove active class from all tabs and contents
-                    tabContainer.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                    tabContainer.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                    if (barbershopPhotoInput && barbershopPhotoBtn && barbershopPhotoPreview) {
+                        barbershopPhotoBtn.addEventListener('click', function() {
+                            barbershopPhotoInput.click();
+                        });
 
-                    // Add active class to clicked tab and corresponding content
-                    this.classList.add('active');
-                    document.getElementById(`${tabId}-tab`).classList.add('active');
-                });
-            });
-
-            // Avatar upload preview
-            const avatarInput = document.getElementById('avatarInput');
-            const avatarPreview = document.querySelector('.avatar-preview');
-
-            if (avatarInput && avatarPreview) {
-                document.querySelector('.avatar-upload-btn').addEventListener('click', function() {
-                    avatarInput.click();
-                });
-
-                avatarInput.addEventListener('change', function(e) {
-                    const file = e.target.files[0];
-                    if (file) {
-                        const reader = new FileReader();
-                        reader.onload = function(event) {
-                            avatarPreview.innerHTML = `<img src="${event.target.result}" alt="Preview">`;
-                        };
-                        reader.readAsDataURL(file);
+                        barbershopPhotoInput.addEventListener('change', function(e) {
+                            const file = e.target.files[0];
+                            if (file) {
+                                const reader = new FileReader();
+                                reader.onload = function(event) {
+                                    barbershopPhotoPreview.innerHTML = `<img src="${event.target.result}" alt="Preview">`;
+                                };
+                                reader.readAsDataURL(file);
+                            }
+                        });
                     }
-                });
-            }
 
-            // Avatar upload preview para foto do estabelecimento
-            const barbershopPhotoInput = document.getElementById('barbershopPhotoInput');
-            const barbershopPhotoBtn = document.getElementById('barbershop-photo-btn');
-            const barbershopPhotoPreview = document.getElementById('barbershop-photo-preview');
-
-            if (barbershopPhotoInput && barbershopPhotoBtn && barbershopPhotoPreview) {
-                barbershopPhotoBtn.addEventListener('click', function() {
-                    barbershopPhotoInput.click();
-                });
-
-                barbershopPhotoInput.addEventListener('change', function(e) {
-                    const file = e.target.files[0];
-                    if (file) {
-                        const reader = new FileReader();
-                        reader.onload = function(event) {
-                            barbershopPhotoPreview.innerHTML = `<img src="${event.target.result}" alt="Preview">`;
-                        };
-                        reader.readAsDataURL(file);
-                    }
-                });
-            }
-
-            // Add another time slot
-            document.querySelectorAll('.add-another-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const timeSlotsEdit = this.previousElementSibling;
-                    const newTimeInputGroup = document.createElement('div');
-                    newTimeInputGroup.className = 'time-input-group';
-                    newTimeInputGroup.innerHTML = `
+                    // Add another time slot
+                    document.querySelectorAll('.add-another-btn').forEach(btn => {
+                        btn.addEventListener('click', function() {
+                            const timeSlotsEdit = this.previousElementSibling;
+                            const newTimeInputGroup = document.createElement('div');
+                            newTimeInputGroup.className = 'time-input-group';
+                            newTimeInputGroup.innerHTML = `
                         <input type="time" class="time-input" value="09:00">
                         <span>às</span>
                         <input type="time" class="time-input" value="12:00">
@@ -2086,19 +2406,109 @@
                             <i class="fas fa-times"></i>
                         </button>
                     `;
-                    timeSlotsEdit.appendChild(newTimeInputGroup);
+                            timeSlotsEdit.appendChild(newTimeInputGroup);
 
-                    // Add event listener to new remove button
-                    newTimeInputGroup.querySelector('.remove-time-btn').addEventListener('click', function() {
-                        this.parentElement.remove();
+                            // Add event listener to new remove button
+                            newTimeInputGroup.querySelector('.remove-time-btn').addEventListener('click', function() {
+                                this.parentElement.remove();
+                            });
+                        });
+                    });
+
+                    // Remove time slot
+                    document.querySelectorAll('.remove-time-btn').forEach(btn => {
+                        btn.addEventListener('click', function() {
+                            this.parentElement.remove();
+                        });
+                    });
+
+                    // Compartilhar link de agendamento moderno melhorado
+                    const copyBtn = document.getElementById('copyBookingLinkBtn');
+                    const bookingLink = document.getElementById('bookingLink');
+                    const globalCopyMsg = document.getElementById('globalCopySuccessMsg');
+
+                    if (copyBtn && bookingLink && globalCopyMsg) {
+                        copyBtn.addEventListener('click', function() {
+                            bookingLink.select();
+                            bookingLink.setSelectionRange(0, 99999); // Para mobile
+                            document.execCommand('copy');
+                            globalCopyMsg.style.display = 'flex';
+                            setTimeout(() => {
+                                globalCopyMsg.style.display = 'none';
+                            }, 1800);
+                        });
+                    }
+
+                    // Modal de adicionar dia de folga especial
+                    const addDayOffModal = document.getElementById('addDayOffModal');
+                    const saveDayOffBtn = document.getElementById('saveDayOffBtn');
+                    const dayOffDate = document.getElementById('dayOffDate');
+                    const dayOffReason = document.getElementById('dayOffReason');
+                    const specialDaysOffList = document.getElementById('specialDaysOffList');
+                    const specialDayOffEmpty = document.getElementById('specialDayOffEmpty');
+
+                    // Setar data mínima para hoje
+                    if (dayOffDate) {
+                        const today = new Date();
+                        const yyyy = today.getFullYear();
+                        const mm = String(today.getMonth() + 1).padStart(2, '0');
+                        const dd = String(today.getDate()).padStart(2, '0');
+                        dayOffDate.min = `${yyyy}-${mm}-${dd}`;
+                    }
+
+                    // Adicionar dia de folga especial
+                    if (saveDayOffBtn && dayOffDate && specialDaysOffList) {
+                        saveDayOffBtn.addEventListener('click', function() {
+                                    const date = dayOffDate.value;
+                                    const reason = dayOffReason.value.trim();
+                                    if (!date) {
+                                        dayOffDate.focus();
+                                        return;
+                                    }
+
+                                    // Formatar data para dd/mm/yyyy
+                                    const [yyyy, mm, dd] = date.split('-');
+                                    const formattedDate = `${dd}/${mm}/${yyyy}`;
+
+                                    // Criar item visual
+                                    const item = document.createElement('div');
+                                    item.className = 'special-day-off-item';
+                                    item.innerHTML = `
+                        <div>
+                            <span class="special-day-off-date"><i class="fas fa-calendar-day"></i> ${formattedDate}</span>
+                            ${reason ? `<span class="special-day-off-reason">(${reason})</span>` : ''}
+                        </div>
+                        <button class="special-day-off-remove" title="Remover" aria-label="Remover">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    `;
+                    // Remover mensagem de vazio
+                    if (specialDayOffEmpty) specialDayOffEmpty.style.display = 'none';
+                    specialDaysOffList.appendChild(item);
+
+                    // Fechar modal
+                    addDayOffModal.style.display = 'none';
+
+                    // Remover item ao clicar no botão
+                    item.querySelector('.special-day-off-remove').addEventListener('click', function() {
+                        item.remove();
+                        // Se não houver mais itens, mostrar mensagem de vazio
+                        if (specialDaysOffList.querySelectorAll('.special-day-off-item').length === 0 && specialDayOffEmpty) {
+                            specialDayOffEmpty.style.display = '';
+                        }
                     });
                 });
-            });
+            }
 
-            // Remove time slot
-            document.querySelectorAll('.remove-time-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    this.parentElement.remove();
+            // Galeria de seleção de imagem para novo serviço
+            document.querySelectorAll('.service-gallery').forEach(gallery => {
+                gallery.addEventListener('click', function(e) {
+                    const option = e.target.closest('.gallery-option');
+                    if (option) {
+                        gallery.querySelectorAll('.gallery-option').forEach(opt => opt.classList.remove('selected'));
+                        option.classList.add('selected');
+                        // Aqui você pode salvar o valor de option.dataset.img para uso posterior
+                    }
                 });
             });
         });
