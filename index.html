@@ -7,6 +7,7 @@
     <title>NaRégua - Dashboard do Barbeiro</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+
     <style>
          :root {
             --primary: #dac02d;
@@ -265,8 +266,6 @@
         .edit-btn,
         .card-header .edit-btn,
         .card-header .edit-btn#viewAllAppointments,
-        .card-header .edit-btn#editServicesBtn,
-        .card-header .edit-btn#editWorkingHoursBtn,
         .card-header .edit-btn#addDayOffBtn,
         .card-header .edit-btn#editBarbershopInfoBtn,
         .card-header .edit-btn#viewPushHistoryBtn {
@@ -454,43 +453,146 @@
         
         .services-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+            gap: 18px;
+            margin-top: 10px;
         }
         
         .service-card {
             background-color: var(--gray-light);
-            border-radius: 10px;
-            padding: 15px;
+            border-radius: 12px;
+            padding: 18px 18px 14px 18px;
             display: flex;
             flex-direction: column;
-            transition: all 0.3s;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+            transition: box-shadow 0.22s, transform 0.18s;
+            border: 1.5px solid var(--primary-light);
+            min-width: 0;
+            position: relative;
         }
         
         .service-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.10);
+            border-color: var(--primary);
+            transform: translateY(-2px) scale(1.01);
         }
         
         .service-card-header {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
+            justify-content: space-between;
+            gap: 18px;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
         }
         
         .service-card-name {
-            font-weight: 600;
-            color: var(--text);
+            font-weight: 700;
+            color: var(--primary-dark);
+            font-size: 1.13rem;
+            flex: 1 1 180px;
+            min-width: 120px;
+            word-break: break-word;
+            line-height: 1.2;
+            margin-right: 10px;
+            max-width: 100%;
+            overflow-wrap: anywhere;
+        }
+        
+        .service-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+        
+        .service-action-btn {
+            background: none;
+            border: none;
+            color: var(--primary-dark);
+            font-size: 1.18rem;
+            border-radius: 50%;
+            width: 34px;
+            height: 34px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+            cursor: pointer;
+            outline: none;
+        }
+        
+        .service-action-btn.edit-btn {
+            color: var(--primary);
+        }
+        
+        .service-action-btn.delete-btn {
+            color: #c82333;
+        }
+        
+        .service-action-btn:hover,
+        .service-action-btn:focus {
+            background: var(--primary);
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(26, 75, 140, 0.10);
+        }
+        
+        .service-action-btn.delete-btn:hover,
+        .service-action-btn.delete-btn:focus {
+            background: #c82333;
+            color: #fff;
         }
         
         .service-card-details {
             display: flex;
-            justify-content: space-between;
-            margin-top: 10px;
-            font-size: 14px;
+            gap: 18px;
+            margin-top: 8px;
+            font-size: 0.99rem;
             color: var(--text);
+            flex-wrap: wrap;
+        }
+        
+        .service-switch-title {
+            display: flex;
+            align-items: center;
+            min-width: 0;
+            flex: 1 1 0;
+        }
+        
+        .service-card-name {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            min-width: 0;
+            flex: 1 1 0;
+        }
+        /* Modal Editar Serviços */
+        
+        #editServiceModal .modal-content {
+            position: relative;
+            background: var(--card);
+            border-radius: 14px;
+            box-shadow: 0 8px 32px rgba(26, 75, 140, 0.13);
+            padding: 32px 24px 18px 24px;
+            animation: modalFadeIn 0.3s;
+        }
+        
+        #editServiceModal .modal-header {
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 18px;
+        }
+        
+        #editServiceModal .modal-title {
+            color: var(--primary-dark);
+            font-size: 1.18rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        #editServiceMsg {
+            color: var(--primary-dark);
+            text-align: center;
         }
         
         .toggle-switch {
@@ -643,8 +745,11 @@
         }
         
         .day-title {
-            font-weight: 600;
-            color: var(--text);
+            color: var(--primary-dark);
+            /* dourado */
+            font-weight: bold;
+            font-size: 1.13rem;
+            letter-spacing: 0.5px;
         }
         
         .time-slots {
@@ -740,6 +845,13 @@
             font-size: 24px;
             cursor: pointer;
             color: var(--text);
+            position: absolute;
+            top: 12px;
+            right: 18px;
+            font-size: 1.5rem;
+            color: #888;
+            cursor: pointer;
+            z-index: 2;
         }
         
         .form-group {
@@ -1135,82 +1247,6 @@
         body.dark-mode .footer-admin-link-modern:focus {
             color: var(--primary);
         }
-        /* Organização visual do modal de editar serviços */
-        
-        #editServicesModal .form-group {
-            margin-bottom: 0;
-        }
-        
-        #editServicesModal .service-option {
-            border-radius: 8px;
-            background: var(--gray);
-            padding: 16px 14px 12px 14px;
-            margin-bottom: 18px;
-            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
-        }
-        
-        #editServicesModal .service-option-header {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            margin-bottom: 12px;
-        }
-        
-        #editServicesModal .service-name {
-            font-weight: 600;
-            font-size: 1.08rem;
-            color: var(--text);
-        }
-        
-        #editServicesModal .time-price-inputs {
-            display: flex;
-            gap: 18px;
-            align-items: center;
-        }
-        
-        #editServicesModal .time-price-inputs input.form-control {
-            width: 70px;
-            padding-left: 28px;
-            font-size: 1em;
-        }
-        
-        #editServicesModal .time-price-inputs {
-            position: relative;
-        }
-        
-        #editServicesModal .time-price-inputs input[placeholder*="Tempo"] {
-            background-image: url('data:image/svg+xml;utf8,<svg fill="gray" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 448c-110.3 0-200-89.7-200-200S145.7 56 256 56s200 89.7 200 200-89.7 200-200 200zm0-368c-92.6 0-168 75.4-168 168s75.4 168 168 168 168-75.4 168-168-75.4-168-168-168zm12 88v76h68c6.6 0 12 5.4 12 12s-5.4 12-12 12h-80c-6.6 0-12-5.4-12-12V136c0-6.6 5.4-12 12-12s12 5.4 12 12z"/></svg>');
-            background-repeat: no-repeat;
-            background-position: 6px 50%;
-            background-size: 16px 16px;
-        }
-        
-        #editServicesModal .time-price-inputs input[placeholder*="Preço"] {
-            background-image: url('data:image/svg+xml;utf8,<svg fill="gray" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 288 512"><path d="M209.3 233.3l-80-32A16 16 0 0 1 112 186V152a24 24 0 0 1 24-24h16a24 24 0 0 1 24 24v8a8 8 0 0 0 8 8h16a8 8 0 0 0 8-8v-8a56 56 0 0 0-56-56V56a8 8 0 0 0-8-8h-16a8 8 0 0 0-8 8v40a56 56 0 0 0-56 56v34a48 48 0 0 0 30.7 44.7l80 32A16 16 0 0 1 176 326v34a24 24 0 0 1-24 24h-16a24 24 0 0 1-24-24v-8a8 8 0 0 0-8-8h-16a8 8 0 0 0-8 8v8a56 56 0 0 0 56 56v40a8 8 0 0 0 8 8h16a8 8 0 0 0 8-8v-40a56 56 0 0 0 56-56v-34a48 48 0 0 0-30.7-44.7z"/></svg>');
-            background-repeat: no-repeat;
-            background-position: 6px 50%;
-            background-size: 16px 16px;
-        }
-        
-        #editServicesModal .time-price-inputs input.form-control {
-            padding-left: 28px;
-        }
-        
-        #editServicesModal .time-price-inputs input.form-control:focus {
-            border-color: var(--primary);
-        }
-        
-        #editServicesModal .tab-content {
-            margin-top: 10px;
-        }
-        
-        #editWorkingHoursModal .day-schedule-edit {
-            background: var(--gray, #f3f3f3);
-            border-radius: 10px;
-            padding: 18px 16px 14px 16px;
-            margin-bottom: 18px;
-        }
-        /* Fim do bloco de organização visual do modal de editar serviços */
         /* Responsive Design */
         
         @media screen and (max-width: 768px) {
@@ -1437,74 +1473,6 @@
             padding: 12px 0 0 2px;
         }
         
-        .service-gallery {
-            display: flex;
-            gap: 16px;
-            margin-top: 8px;
-            flex-wrap: wrap;
-            justify-content: flex-start;
-        }
-        
-        .gallery-option {
-            border: 2px solid transparent;
-            border-radius: 10px;
-            overflow: hidden;
-            cursor: pointer;
-            transition: border-color 0.2s, box-shadow 0.2s;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-            background: var(--gray-light);
-            width: 68px;
-            height: 68px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
-        
-        .gallery-option.selected {
-            border-color: var(--primary);
-            box-shadow: 0 4px 14px rgba(26, 75, 140, 0.10);
-        }
-        
-        .gallery-option img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-            border-radius: 8px;
-            transition: transform 0.18s;
-        }
-        
-        .gallery-option:hover img {
-            transform: scale(1.07);
-        }
-        
-        .gallery-option .gallery-none-img {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #f3f3f3;
-            color: #b0b0b0;
-            font-size: 2rem;
-        }
-        
-        .gallery-option[data-img="none"].selected {
-            border-color: none;
-            box-shadow: 0 4px 14px rgba(160, 160, 160, 0.10);
-        }
-        
-        @media (max-width: 600px) {
-            .service-gallery {
-                gap: 10px;
-            }
-            .gallery-option {
-                width: 54px;
-                height: 54px;
-            }
-        }
-        
         .global-copy-success {
             position: fixed;
             top: 32px;
@@ -1529,117 +1497,6 @@
                 font-size: 0.98rem;
                 padding: 10px 12px 10px 12px;
                 top: 16px;
-            }
-        }
-        
-        .push-notification-form {
-            background: var(--gray-light);
-            border-radius: 10px;
-            padding: 24px 18px 18px 18px;
-            box-shadow: 0 2px 8px rgba(26, 75, 140, 0.04);
-            margin-top: 18px;
-            max-width: 540px;
-        }
-        
-        .push-notification-form .form-group {
-            margin-bottom: 18px;
-        }
-        
-        .push-notification-form .form-label {
-            font-weight: 600;
-            color: var(--primary);
-            margin-bottom: 7px;
-            display: block;
-        }
-        
-        .push-notification-form .form-control {
-            background: var(--white);
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            padding: 10px 12px;
-            font-size: 1.08rem;
-            color: var(--text);
-            transition: border 0.2s;
-        }
-        
-        .push-notification-form .form-control:focus {
-            border-color: var(--primary);
-        }
-        
-        .push-recipients {
-            display: flex;
-            gap: 18px;
-            flex-wrap: wrap;
-            margin-top: 4px;
-        }
-        
-        .push-recipients label {
-            font-size: 1rem;
-            color: var(--text);
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            cursor: pointer;
-        }
-        
-        .char-count {
-            font-size: 0.93rem;
-            color: var(--gray);
-            margin-top: 4px;
-            text-align: right;
-        }
-        
-        #pushNotificationStatus {
-            font-weight: 600;
-            margin-left: 10px;
-        }
-        
-        .push-history-item {
-            background: var(--gray-light);
-            border-radius: 8px;
-            padding: 13px 14px 10px 14px;
-            margin-bottom: 13px;
-            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
-            font-size: 1rem;
-            color: var(--text);
-            position: relative;
-        }
-        
-        .push-history-item .push-history-title {
-            font-weight: 600;
-            color: var (--primary);
-            margin-bottom: 2px;
-        }
-        
-        .push-history-item .push-history-message {
-            margin-bottom: 4px;
-        }
-        
-        .push-history-item .push-history-meta {
-            font-size: 0.93rem;
-            color: var(--gray);
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-        
-        .push-history-item .push-history-link {
-            color: var(--primary);
-            text-decoration: underline;
-            font-size: 0.97rem;
-            margin-left: 6px;
-        }
-        
-        .push-history-item .push-history-date {
-            font-size: 0.92rem;
-            color: var(--gray);
-            margin-left: auto;
-        }
-        
-        @media (max-width: 600px) {
-            .push-notification-form {
-                padding: 12px 4px 10px 4px;
-                max-width: 100%;
             }
         }
         /* Barra lateral estilo Mac */
@@ -1804,6 +1661,220 @@
                 height: 24px;
             }
         }
+        
+        .dia-header h3 {
+            margin: 18px 0 8px 0;
+            font-size: 1.1em;
+            color: var(--primary-dark);
+        }
+        
+        .dia-header {
+            background: linear-gradient(90deg, var(--primary-dark) 0%, var(--primary) 100%);
+            padding: 10px 18px;
+            border-radius: 8px;
+            margin: 28px 0 12px 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+            display: flex;
+            align-items: center;
+        }
+        
+        .dia-header h3 {
+            color: #fff !important;
+            font-size: 1.15em;
+            font-weight: 700;
+            margin: 0;
+            letter-spacing: 1px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.10);
+        }
+        
+        .appointment-item {
+            background: var(--card);
+            border: 1.5px solid var(--primary-light);
+            border-radius: 7px;
+            margin: 10px 0 10px 0;
+            padding: 14px 18px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            transition: box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        
+        .appointment-item:hover {
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.10);
+            border-color: var(--primary);
+        }
+        
+        .appointment-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        
+        .appointment-client {
+            font-weight: 600;
+            color: var(--primary-dark);
+            font-size: 1.05em;
+        }
+        
+        .appointment-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px;
+            font-size: 0.98em;
+            color: var(--gray-dark);
+        }
+        
+        .appointment-status {
+            background: var(--success);
+            color: #fff !important;
+            border-radius: 12px;
+            padding: 2px 10px;
+            font-size: 0.93em;
+            margin-left: 10px;
+        }
+        /* NOVO: Estilo para ações dos serviços */
+        
+        .service-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .service-action-btn {
+            background: none;
+            border: none;
+            color: var(--primary-dark);
+            font-size: 1.18rem;
+            border-radius: 50%;
+            width: 34px;
+            height: 34px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+            cursor: pointer;
+            outline: none;
+            margin-left: 0;
+        }
+        
+        .service-action-btn.edit-btn {
+            color: var(--primary);
+        }
+        
+        .service-action-btn.delete-btn {
+            color: #c82333;
+        }
+        
+        .service-action-btn:hover,
+        .service-action-btn:focus {
+            background: var(--primary);
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(26, 75, 140, 0.10);
+        }
+        
+        .service-action-btn.delete-btn:hover,
+        .service-action-btn.delete-btn:focus {
+            background: #c82333;
+            color: #fff;
+        }
+        /* Modal e turnos */
+        
+        .turno-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .turno-row input[type="time"] {
+            padding: 6px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 1rem;
+        }
+        
+        .turno-row .remove-turno-btn {
+            background: #e74c3c;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .turno-row .remove-turno-btn:hover {
+            background: #c0392b;
+        }
+        
+        .fechar-dia-btn,
+        .abrir-dia-btn {
+            border: none;
+            border-radius: 22px;
+            padding: 10px 26px;
+            font-size: 1rem;
+            font-weight: 600;
+            margin: 18px auto 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+        
+        .fechar-dia-btn {
+            background: #e74c3c;
+            color: #fff;
+        }
+        
+        .fechar-dia-btn:hover {
+            background: #c0392b;
+        }
+        
+        .abrir-dia-btn {
+            background: var(--primary, #dac02d);
+            color: #fff;
+        }
+        
+        .abrir-dia-btn:hover {
+            background: var(--primary-dark, #816a02);
+        }
+        
+        .dia-fechado-msg {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 24px 0 12px 0;
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        #horarioModal #turnosContainer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        #horarioModal .turno-row {
+            justify-content: center;
+        }
     </style>
 </head>
 
@@ -1878,87 +1949,32 @@
         <!-- Substitua a lista fixa de próximos agendamentos por este bloco dinâmico -->
         <section class="dashboard-section animate-slide-up">
             <div class="card-header">
-                <h2 class="section-title"><i class="fas fa-calendar-alt"></i> Próximos Agendamentos</h2>
+                <h2 class="section-title"><i class="fas fa-calendar-alt"></i> Próximos Agendamentos
+                </h2>
                 <div class="appointments-filter">
-                    <button class="filter-btn active" data-filter="today"><i class="fas fa-calendar-day"></i> Hoje</button>
-                    <button class="filter-btn" data-filter="week"><i class="fas fa-calendar-week"></i> Semana</button>
-                    <button class="filter-btn" data-filter="month"><i class="fas fa-calendar"></i> Mês</button>
+                    <button class="filter-btn active" data-filter="today"><i
+                                class="fas fa-calendar-day"></i> Hoje</button>
+                    <button class="filter-btn" data-filter="week"><i
+                                class="fas fa-calendar-week"></i>
+                            Semana</button>
+                    <button class="filter-btn" data-filter="month"><i
+                                class="fas fa-calendar"></i> Mês</button>
                 </div>
             </div>
             <div class="appointments-list" id="filteredAppointmentsList">
                 <!-- Agendamentos filtrados aparecerão aqui -->
             </div>
+            <div id="lista-agendamentos"></div>
         </section>
 
-        <section class="dashboard-section animate-slide-up">
-            <div class="card-header">
-                <h2 class="section-title"><i class="fas fa-cut"></i> Serviços Oferecidos</h2>
-                <button class="edit-btn" id="editServicesBtn">
-                        <i class="fas fa-edit"></i> Editar
+        <section class="dashboard-section animate-slide-up" id="services-section">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
+                <h2 class="section-title"><i class="fas fa-cut"></i> Serviços oferecidos</h2>
+                <button id="addServiceBtn" class="edit-btn" style="margin-left:12px;">
+                        <i class="fas fa-plus"></i>
                     </button>
             </div>
-
-            <div class="services-container">
-                <div class="service-card">
-                    <div class="service-card-header">
-                        <div class="service-card-name">Barba</div>
-                        <label class="toggle-switch">
-                                <input type="checkbox" checked>
-                                <span class="slider"></span>
-                            </label>
-                    </div>
-                    <div class="service-card-details">
-                        <span><i class="far fa-clock"></i> 15min</span>
-                        <span><i class="fas fa-dollar-sign"></i> R$
-                                20,00</span>
-                    </div>
-                </div>
-
-                <div class="service-card">
-                    <div class="service-card-header">
-                        <div class="service-card-name">Corte de Cabelo</div>
-                        <label class="toggle-switch">
-                                <input type="checkbox" checked>
-                                <span class="slider"></span>
-                            </label>
-                    </div>
-                    <div class="service-card-details">
-                        <span><i class="far fa-clock"></i> 30min</span>
-                        <span><i class="fas fa-dollar-sign"></i> R$
-                                35,00</span>
-                    </div>
-                </div>
-
-                <div class="service-card">
-                    <div class="service-card-header">
-                        <div class="service-card-name">Corte + Barba</div>
-                        <label class="toggle-switch">
-                                <input type="checkbox" checked>
-                                <span class="slider"></span>
-                            </label>
-                    </div>
-                    <div class="service-card-details">
-                        <span><i class="far fa-clock"></i> 45min</span>
-                        <span><i class="fas fa-dollar-sign"></i> R$
-                                50,00</span>
-                    </div>
-                </div>
-
-                <div class="service-card">
-                    <div class="service-card-header">
-                        <div class="service-card-name">Bigodinho</div>
-                        <label class="toggle-switch">
-                                <input type="checkbox">
-                                <span class="slider"></span>
-                            </label>
-                    </div>
-                    <div class="service-card-details">
-                        <span><i class="far fa-clock"></i> 5min</span>
-                        <span><i class="fas fa-dollar-sign"></i> R$
-                                7,00</span>
-                    </div>
-                </div>
-            </div>
+            <div id="servicesContainer" class="services-container"></div>
         </section>
 
         <section class="dashboard-section animate-slide-up">
@@ -1983,123 +1999,164 @@
             </div>
         </section>
 
-        <section class="dashboard-section animate-slide-up">
-            <div class="card-header">
+        <section class="dashboard-section animate-slide-up" id="horarios-section">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
                 <h2 class="section-title"><i class="fas fa-clock"></i> Horários de Atendimento</h2>
-                <button class="edit-btn" id="editWorkingHoursBtn">
-                        <i class="fas fa-edit"></i> Editar
-                    </button>
             </div>
-
-            <div class="working-hours">
-                <div class="day-schedule">
-                    <div class="day-header">
-                        <div class="day-title">Segunda-feira</div>
-                        <div class="day-off-toggle">
-                            <span class="day-off-label">Dia de folga:</span>
-                            <label class="toggle-switch">
+            </div>
+            <div class="working-hours" id="workingHoursGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 18px; margin-top: 10px;">
+                <div class="day-schedule" style="background-color: var(--gray-light); border-radius: 12px; padding: 18px 18px 14px 18px; box-shadow: 0 2px 10px rgba(0,0,0,0.04); border: 1.5px solid var(--primary-light); min-width: 0; position: relative;">
+                    <div class="day-header" style="display:flex;align-items:center;justify-content:space-between;">
+                        <div style="display:flex;align-items:center;gap:10px;">
+                            <div class="day-off-toggle">
+                                <span class="day-off-label" style="font-size:0.97rem;"></span>
+                                <label class="toggle-switch">
                                     <input type="checkbox">
                                     <span class="slider"></span>
                                 </label>
+                            </div>
+                            <div class="day-title">Segunda-feira</div>
                         </div>
+                        <button class="edit-btn" title="Editar horário" style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:var(--gray);border:none;border-radius:50%;box-shadow:0 1px 4px rgba(0,0,0,0.04);margin-left:8px;transition:background 0.2s;">
+                            <i class="fas fa-pen"
+                                style="color:#FFD700;font-size:1.1rem;"></i>
+                        </button>
                     </div>
                     <div class="time-slots">
-                        <span class="time-slot">09:00 - 12:00</span>
-                        <span class="time-slot">14:00 - 18:00</span>
+                        <input class="input-horario-semana" data-dia="segunda" type="text" value="09:00-18:00">
+                        <input class="input-horario-semana" data-dia="terca" type="text" value="09:00-18:00">
                     </div>
                 </div>
-                <div class="day-schedule">
-                    <div class="day-header">
-                        <div class="day-title">Terça-feira</div>
-                        <div class="day-off-toggle">
-                            <span class="day-off-label">Dia de folga:</span>
-                            <label class="toggle-switch">
+                <div class="day-schedule" style="background-color: var(--gray-light); border-radius: 12px; padding: 18px 18px 14px 18px; box-shadow: 0 2px 10px rgba(0,0,0,0.04); border: 1.5px solid var(--primary-light); min-width: 0; position: relative;">
+                    <div class="day-header" style="display:flex;align-items:center;justify-content:space-between;">
+                        <div style="display:flex;align-items:center;gap:10px;">
+                            <div class="day-off-toggle">
+                                <span class="day-off-label" style="font-size:0.97rem;"></span>
+                                <label class="toggle-switch">
                                     <input type="checkbox">
                                     <span class="slider"></span>
                                 </label>
+                            </div>
+                            <div class="day-title">Terça-feira</div>
                         </div>
+                        <button class="edit-btn" title="Editar horário" style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:var(--gray);border:none;border-radius:50%;box-shadow:0 1px 4px rgba(0,0,0,0.04);margin-left:8px;transition:background 0.2s;">
+                            <i class="fas fa-pen"
+                                style="color:#FFD700;font-size:1.1rem;"></i>
+                        </button>
                     </div>
                     <div class="time-slots">
-                        <span class="time-slot">09:00 - 12:00</span>
-                        <span class="time-slot">14:00 - 18:00</span>
+                        <input class="input-horario-semana" data-dia="segunda" type="text" value="09:00-18:00">
+                        <input class="input-horario-semana" data-dia="terca" type="text" value="09:00-18:00">
                     </div>
                 </div>
-                <div class="day-schedule">
-                    <div class="day-header">
-                        <div class="day-title">Quarta-feira</div>
-                        <div class="day-off-toggle">
-                            <span class="day-off-label">Dia de folga:</span>
-                            <label class="toggle-switch">
+                <div class="day-schedule" style="background-color: var(--gray-light); border-radius: 12px; padding: 18px 18px 14px 18px; box-shadow: 0 2px 10px rgba(0,0,0,0.04); border: 1.5px solid var(--primary-light); min-width: 0; position: relative;">
+                    <div class="day-header" style="display:flex;align-items:center;justify-content:space-between;">
+                        <div style="display:flex;align-items:center;gap:10px;">
+                            <div class="day-off-toggle">
+                                <span class="day-off-label" style="font-size:0.97rem;"></span>
+                                <label class="toggle-switch">
                                     <input type="checkbox">
                                     <span class="slider"></span>
                                 </label>
+                            </div>
+                            <div class="day-title">Quarta-feira</div>
                         </div>
+                        <button class="edit-btn" title="Editar horário" style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:var(--gray);border:none;border-radius:50%;box-shadow:0 1px 4px rgba(0,0,0,0.04);margin-left:8px;transition:background 0.2s;">
+                            <i class="fas fa-pen"
+                                style="color:#FFD700;font-size:1.1rem;"></i>
+                        </button>
                     </div>
                     <div class="time-slots">
-                        <span class="time-slot">09:00 - 12:00</span>
-                        <span class="time-slot">14:00 - 18:00</span>
+                        <input class="input-horario-semana" data-dia="segunda" type="text" value="09:00-18:00">
+                        <input class="input-horario-semana" data-dia="terca" type="text" value="09:00-18:00">
                     </div>
                 </div>
-                <div class="day-schedule">
-                    <div class="day-header">
-                        <div class="day-title">Quinta-feira</div>
-                        <div class="day-off-toggle">
-                            <span class="day-off-label">Dia de folga:</span>
-                            <label class="toggle-switch">
+                <div class="day-schedule" style="background-color: var(--gray-light); border-radius: 12px; padding: 18px 18px 14px 18px; box-shadow: 0 2px 10px rgba(0,0,0,0.04); border: 1.5px solid var(--primary-light); min-width: 0; position: relative;">
+                    <div class="day-header" style="display:flex;align-items:center;justify-content:space-between;">
+                        <div style="display:flex;align-items:center;gap:10px;">
+                            <div class="day-off-toggle">
+                                <span class="day-off-label" style="font-size:0.97rem;"></span>
+                                <label class="toggle-switch">
                                     <input type="checkbox">
                                     <span class="slider"></span>
                                 </label>
+                            </div>
+                            <div class="day-title">Quinta-feira</div>
                         </div>
+                        <button class="edit-btn" title="Editar horário" style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:var(--gray);border:none;border-radius:50%;box-shadow:0 1px 4px rgba(0,0,0,0.04);margin-left:8px;transition:background 0.2s;">
+                            <i class="fas fa-pen"
+                                style="color:#FFD700;font-size:1.1rem;"></i>
+                        </button>
                     </div>
                     <div class="time-slots">
-                        <span class="time-slot">09:00 - 12:00</span>
-                        <span class="time-slot">14:00 - 18:00</span>
+                        <input class="input-horario-semana" data-dia="segunda" type="text" value="09:00-18:00">
+                        <input class="input-horario-semana" data-dia="terca" type="text" value="09:00-18:00">
                     </div>
                 </div>
-                <div class="day-schedule">
-                    <div class="day-header">
-                        <div class="day-title">Sexta-feira</div>
-                        <div class="day-off-toggle">
-                            <span class="day-off-label">Dia de folga:</span>
-                            <label class="toggle-switch">
+                <div class="day-schedule" style="background-color: var(--gray-light); border-radius: 12px; padding: 18px 18px 14px 18px; box-shadow: 0 2px 10px rgba(0,0,0,0.04); border: 1.5px solid var(--primary-light); min-width: 0; position: relative;">
+                    <div class="day-header" style="display:flex;align-items:center;justify-content:space-between;">
+                        <div style="display:flex;align-items:center;gap:10px;">
+                            <div class="day-off-toggle">
+                                <span class="day-off-label" style="font-size:0.97rem;"></span>
+                                <label class="toggle-switch">
                                     <input type="checkbox">
                                     <span class="slider"></span>
                                 </label>
+                            </div>
+                            <div class="day-title">Sexta-feira</div>
                         </div>
+                        <button class="edit-btn" title="Editar horário" style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:var(--gray);border:none;border-radius:50%;box-shadow:0 1px 4px rgba(0,0,0,0.04);margin-left:8px;transition:background 0.2s;">
+                            <i class="fas fa-pen"
+                                style="color:#FFD700;font-size:1.1rem;"></i>
+                        </button>
                     </div>
                     <div class="time-slots">
-                        <span class="time-slot">09:00 - 12:00</span>
-                        <span class="time-slot">14:00 - 18:00</span>
+                        <input class="input-horario-semana" data-dia="segunda" type="text" value="09:00-18:00">
+                        <input class="input-horario-semana" data-dia="terca" type="text" value="09:00-18:00">
                     </div>
                 </div>
-                <div class="day-schedule">
-                    <div class="day-header">
-                        <div class="day-title">Sábado</div>
-                        <div class="day-off-toggle">
-                            <span class="day-off-label">Dia de folga:</span>
-                            <label class="toggle-switch">
+                <div class="day-schedule" style="background-color: var(--gray-light); border-radius: 12px; padding: 18px 18px 14px 18px; box-shadow: 0 2px 10px rgba(0,0,0,0.04); border: 1.5px solid var(--primary-light); min-width: 0; position: relative;">
+                    <div class="day-header" style="display:flex;align-items:center;justify-content:space-between;">
+                        <div style="display:flex;align-items:center;gap:10px;">
+                            <div class="day-off-toggle">
+                                <span class="day-off-label" style="font-size:0.97rem;"></span>
+                                <label class="toggle-switch">
                                     <input type="checkbox">
                                     <span class="slider"></span>
                                 </label>
+                            </div>
+                            <div class="day-title">Sábado</div>
                         </div>
+                        <button class="edit-btn" title="Editar horário" style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:var(--gray);border:none;border-radius:50%;box-shadow:0 1px 4px rgba(0,0,0,0.04);margin-left:8px;transition:background 0.2s;">
+                            <i class="fas fa-pen"
+                                style="color:#FFD700;font-size:1.1rem;"></i>
+                        </button>
                     </div>
                     <div class="time-slots">
-                        <span class="time-slot">09:00 - 13:00</span>
+                        <input class="input-horario-semana" data-dia="segunda" type="text" value="09:00-18:00">
+                        <input class="input-horario-semana" data-dia="terca" type="text" value="09:00-18:00">
                     </div>
                 </div>
-                <div class="day-schedule">
-                    <div class="day-header">
-                        <div class="day-title">Domingo</div>
-                        <div class="day-off-toggle">
-                            <span class="day-off-label">Dia de folga:</span>
-                            <label class="toggle-switch">
-                                    <input type="checkbox" checked>
+                <div class="day-schedule" style="background-color: var(--gray-light); border-radius: 12px; padding: 18px 18px 14px 18px; box-shadow: 0 2px 10px rgba(0,0,0,0.04); border: 1.5px solid var(--primary-light); min-width: 0; position: relative;">
+                    <div class="day-header" style="display:flex;align-items:center;justify-content:space-between;">
+                        <div style="display:flex;align-items:center;gap:10px;">
+                            <div class="day-off-toggle">
+                                <span class="day-off-label" style="font-size:0.97rem;"></span>
+                                <label class="toggle-switch">
+                                    <input type="checkbox">
                                     <span class="slider"></span>
                                 </label>
+                            </div>
+                            <div class="day-title">Domingo</div>
                         </div>
+                        <button class="edit-btn" title="Editar horário" style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:var(--gray);border:none;border-radius:50%;box-shadow:0 1px 4px rgba(0,0,0,0.04);margin-left:8px;transition:background 0.2s;">
+                            <i class="fas fa-pen"
+                                style="color:#FFD700;font-size:1.1rem;"></i>
+                        </button>
                     </div>
                     <div class="time-slots">
-                        <!-- Domingo normalmente fechado, mas pode adicionar horários se desejar -->
+                        <input class="input-horario-semana" data-dia="segunda" type="text" value="09:00-18:00">
+                        <input class="input-horario-semana" data-dia="terca" type="text" value="09:00-18:00">
                     </div>
                 </div>
             </div>
@@ -2110,8 +2167,8 @@
                 <h2 class="section-title"><i class="fas fa-calendar-times"></i> Dias Especiais de Folga
                 </h2>
                 <button class="edit-btn" id="addDayOffBtn">
-                        <i class="fas fa-plus"></i> Adicionar
-                    </button>
+                    <i class="fas fa-plus"></i> Adicionar
+                </button>
             </div>
             <div class="special-days-off-list" id="specialDaysOffList">
                 <!-- Dias de folga adicionados aparecerão aqui -->
@@ -2125,8 +2182,8 @@
             <div class="card-header">
                 <h2 class="section-title"><i class="fas fa-store"></i> Informações da Barbearia</h2>
                 <button class="edit-btn" id="editBarbershopInfoBtn">
-                        <i class="fas fa-edit"></i> Editar
-                    </button>
+                    <i class="fas fa-edit"></i> Editar
+                </button>
             </div>
 
             <div class="barbershop-info">
@@ -2144,203 +2201,155 @@
                 </div>
             </div>
         </section>
-        <section class="dashboard-section animate-slide-up">
-            <div class="card-header">
-                <h2 class="section-title">
-                    <i class="fas fa-bell"></i> Enviar Notificação Push
-                </h2>
-                <button class="edit-btn" id="viewPushHistoryBtn">
-                        <i class="fas fa-history"></i> Histórico
-                    </button>
-            </div>
-            <form id="pushNotificationForm" class="push-notification-form" autocomplete="off">
-                <div class="form-group">
-                    <label class="form-label" for="pushTitle">
-                            Título da Notificação <span
-                                style="color:var(--primary-dark);">*</span>
-                        </label>
-                    <input type="text" class="form-control" id="pushTitle" maxlength="60" required placeholder="Ex: Promoção especial de hoje!">
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="pushMessage">
-                            Mensagem <span
-                                style="color:var(--primary-dark);">*</span>
-                        </label>
-                    <textarea class="form-control" id="pushMessage" maxlength="180" required rows="3" placeholder="Digite a mensagem da notificação"></textarea>
-                    <div class="char-count" id="pushMessageCount">0/180</div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Destinatários</label>
-                    <div class="push-recipients">
-                        <label><input type="checkbox" id="recipientAll"
-                                    checked> Todos os clientes</label>
-                        <label><input type="checkbox" id="recipientToday">
-                                Clientes com agendamento hoje</label>
-                        <label><input type="checkbox" id="recipientWeek">
-                                Clientes com agendamento nesta semana</label>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="pushUrl">
-                            Link de Ação (opcional)
-                        </label>
-                    <input type="url" class="form-control" id="pushUrl" placeholder="https://...">
-                </div>
-                <div class="modal-footer" style="justify-content: flex-start; gap: 14px;">
-                    <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-paper-plane"></i> Enviar
-                            Notificação
-                        </button>
-                    <span id="pushNotificationStatus" style="display:none;font-size:1rem;"></span>
-                </div>
-            </form>
-        </section>
 
-        <!-- Modal de Histórico de Notificações Push -->
-        <div id="pushHistoryModal" class="modal">
-            <div class="modal-content" style="max-width: 480px;">
-                <div class="modal-header">
-                    <h3 class="modal-title"><i class="fas fa-history"></i> Histórico de Notificações</h3>
-                    <button class="close-modal">&times;</button>
-                </div>
-                <div class="modal-body" id="pushHistoryList" style="max-height: 340px; overflow-y: auto;">
-                    <!-- Histórico será preenchido via JS -->
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary close-modal">Fechar</button>
-                </div>
+        <section class="dashboard-section animate-slide-up" id="notificacoes-section" style="display:none;">
+            <div class="card-header">
+                <h2 class="section-title"><i class="fas fa-bell"></i> Envio Manual de Notificação Push</h2>
             </div>
-        </div>
+            <form id="pushForm" style="max-width:400px;margin:auto;">
+                <label for="title">Título:</label>
+                <input type="text" id="title" name="title" class="form-control" required>
+
+                <label for="body" style="margin-top:16px;">Mensagem:</label>
+                <textarea id="body" name="body" rows="4" class="form-control" required></textarea>
+
+                <button type="submit" class="btn btn-primary" style="margin-top:20px;">Enviar Notificação</button>
+            </form>
+            <div class="msg" id="msg" style="margin-top:20px;font-weight:bold;"></div>
+        </section>
 
     </main>
 
     <!-- Modals -->
-    <!-- Modal de Edição de Serviços -->
-    <div id="editServicesModal" class="modal">
+
+    <!-- Modal de edição de horários -->
+    <div id="horarioModal" class="modal" style="display:none;">
+        <div class="modal-content" style="max-width:420px;">
+            <span class="close" id="closeHorarioModal" style="float:right;font-size:1.5rem;cursor:pointer;">&times;</span>
+            <h3 id="modalHorarioTitle" style="margin-bottom:18px;">Editar Horários
+            </h3>
+            <form id="horarioForm">
+                <input type="hidden" id="modalDiaSemana">
+                <div id="turnosContainer"></div>
+                <button type="button" id="addTurnoBtn" class="btn btn-secondary" style="width:100%;margin:14px 0 10px 0;">
+                    <i class="fas fa-plus"></i> Adicionar turno
+                </button>
+                <button type="submit" class="btn btn-primary" style="width:100%;">Salvar</button>
+            </form>
+        </div>
+    </div>
+    <!-- Modal de Alterar Senha -->
+    <div id="changePasswordModal" class="modal">
         <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Editar Serviços</h3>
-                <button class="close-modal">&times;</button>
+            <!-- Botão X no topo direito -->
+            <button class="close-modal" aria-label="Fechar" type="button" style="position:absolute;top:12px;right:18px;font-size:1.5rem;color:#888;cursor:pointer;z-index:2;">&times;</button>
+            <div class="modal-header" style="padding-right:32px;">
+                <h3 class="modal-title"><i class="fas fa-key"></i> Alterar Senha
+                </h3>
             </div>
             <div class="modal-body">
-                <div class="tab-container">
-                    <div class="tabs">
-                        <div class="tab active" data-tab="existing">Serviços Existentes
-                        </div>
-                        <div class="tab" data-tab="new">Adicionar Novo</div>
+                <form id="changePasswordForm" autocomplete="off">
+                    <div class="form-group senha-group">
+                        <input type="password" class="form-control" id="currentPassword" placeholder="Senha atual" required>
+                        </button>
                     </div>
-
-                    <div class="tab-content active" id="existing-tab">
-                        <div class="form-group">
-                            <label class="form-label">Selecione os serviços
-                                    que deseja oferecer:</label>
-
-                            <div class="service-option">
-                                <div class="service-option-header">
-                                    <label class="toggle-switch">
-                                            <input type="checkbox" checked>
-                                            <span class="slider"></span>
-                                        </label>
-                                    <span class="service-name">Barba</span>
-                                </div>
-                                <div class="time-price-inputs">
-                                    <input type="text" class="form-control" placeholder="Tempo (min)" value="15">
-                                    <input type="text" class="form-control" placeholder="Preço (R$)" value="20.00">
-                                </div>
-                            </div>
-
-                            <div class="service-option">
-                                <div class="service-option-header">
-                                    <label class="toggle-switch">
-                                            <input type="checkbox" checked>
-                                            <span class="slider"></span>
-                                        </label>
-                                    <span class="service-name">Corte de
-                                            Cabelo</span>
-                                </div>
-                                <div class="time-price-inputs">
-                                    <input type="text" class="form-control" placeholder="Tempo (min)" value="30">
-                                    <input type="text" class="form-control" placeholder="Preço (R$)" value="35.00">
-                                </div>
-                            </div>
-
-                            <div class="service-option">
-                                <div class="service-option-header">
-                                    <label class="toggle-switch">
-                                            <input type="checkbox" checked>
-                                            <span class="slider"></span>
-                                        </label>
-                                    <span class="service-name">Corte +
-                                            Barba</span>
-                                </div>
-                                <div class="time-price-inputs">
-                                    <input type="text" class="form-control" placeholder="Tempo (min)" value="45">
-                                    <input type="text" class="form-control" placeholder="Preço (R$)" value="50.00">
-                                </div>
-                            </div>
-
-                            <div class="service-option">
-                                <div class="service-option-header">
-                                    <label class="toggle-switch">
-                                            <input type="checkbox">
-                                            <span class="slider"></span>
-                                        </label>
-                                    <span class="service-name">Bigodinho</span>
-                                </div>
-                                <div class="time-price-inputs">
-                                    <input type="text" class="form-control" placeholder="Tempo (min)" value="5">
-                                    <input type="text" class="form-control" placeholder="Preço (R$)" value="7.00">
-                                </div>
-                            </div>
-                        </div>
+                    <div class="form-group senha-group">
+                        <input type="password" class="form-control" id="newPassword" placeholder="Nova senha" required>
+                        <button type="button" class="password-eye-btn" tabindex="-1" aria-label="Mostrar senha">
+                        <i class="fas fa-eye"></i>
+                    </button>
                     </div>
-
-                    <div class="tab-content" id="new-tab">
-                        <div class="form-group">
-                            <label class="form-label">Nome do
-                                    Serviço</label>
-                            <input type="text" class="form-control" placeholder="Ex: Colorimetria">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Tempo Estimado
-                                    (minutos)</label>
-                            <input type="number" class="form-control" placeholder="Ex: 30">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Preço (R$)</label>
-                            <input type="text" class="form-control" placeholder="Ex: 45.00">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Escolha uma imagem
-                                    para o serviço</label>
-                            <div class="service-gallery">
-                                <div class="gallery-option selected" data-img="none" title="Nenhuma imagem">
-                                    <div class="gallery-none-img">
-                                        <i class="fas fa-ban"></i>
-                                    </div>
-                                </div>
-                                <div class="gallery-option" data-img="img/servicos/corte-masculino.jpg">
-                                    <img src="img/servicos/corte-masculino.jpg" alt="Corte Masculino">
-                                </div>
-                                <div class="gallery-option" data-img="img/servicos/barba.jpg">
-                                    <img src="img/servicos/barba.jpg" alt="Barba">
-                                </div>
-                                <div class="gallery-option" data-img="img/servicos/colorimetria.jpg">
-                                    <img src="img/servicos/colorimetria.jpg" alt="Colorimetria">
-                                </div>
-                                <div class="gallery-option" data-img="img/servicos/sobrancelha.jpg">
-                                    <img src="img/servicos/sobrancelha.jpg" alt="Sobrancelha">
-                                </div>
-                                <!-- Adicione mais imagens conforme desejar -->
-                            </div>
-                        </div>
+                    <div class="form-group senha-group">
+                        <input type="password" class="form-control" id="confirmPassword" placeholder="Confirmar nova senha" required>
+                        <button type="button" class="password-eye-btn" tabindex="-1" aria-label="Mostrar senha">
+                        <i class="fas fa-eye"></i>
+                    </button>
                     </div>
-                </div>
+                </form>
+                <div id="changePasswordError" style="color:var(--primary-dark);margin-top:8px;display:none;font-size:0.98rem;"></div>
+                <div id="changePasswordSuccess" style="color:var(--success);margin-top:8px;display:none;font-size:0.98rem;"></div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-secondary close-modal">Cancelar</button>
-                <button class="btn btn-primary">Salvar Alterações</button>
+                <button class="btn btn-secondary" type="button">Cancelar</button>
+                <button class="btn btn-primary" type="submit" form="changePasswordForm">Salvar Nova Senha</button>
             </div>
+        </div>
+    </div>
+
+    <!-- Modal de adicionar serviços -->
+    <div id="addServiceModal" class="modal">
+        <div class="modal-content" style="max-width:410px;">
+            <span class="close-modal" id="closeAddServiceModal">&times;</span>
+            <h3>Adicionar novo serviço</h3>
+            <form id="addServiceForm">
+                <div class="form-group">
+                    <label class="form-label" for="addServiceName">Nome do
+                    serviço</label>
+                    <input type="text" class="form-control" id="addServiceName" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="addServiceTime">Tempo
+                    estimado</label>
+                    <input type="text" class="form-control" id="addServiceTime" placeholder="Ex: 30min" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="addServicePrice">Preço
+                    (R$)</label>
+                    <input type="number" step="0.01" min="0" class="form-control" id="addServicePrice" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="addServiceImage">URL da imagem
+                    (opcional)</label>
+                    <input type="text" class="form-control" id="addServiceImage">
+                    <div id="addServiceImagePreview" style="margin-top:10px;min-height:60px;  justify-content: center; align-items: center; display: flex"></div>
+                </div>
+                <div class="modal-footer">
+                    <div id="addServiceMsg" style="margin-bottom:10px;font-size:0.98rem; justify-content: center; align-items: center; display: flex"></div>
+                    <button type="submit" class="btn btn-primary">Salvar
+                    serviço</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de edição de serviço -->
+    <div id="editServiceModal" class="modal">
+        <div class="modal-content" style="max-width: 410px;">
+            <div class="modal-header">
+                <h3 class="modal-title"><i class="fas fa-pen"></i> Editar Serviço
+                </h3>
+                <button class="close-modal" id="closeEditServiceModal">&times;</button>
+            </div>
+            <form id="editServiceForm" autocomplete="off">
+                <input type="hidden" id="editServiceId">
+                <div class="form-group">
+                    <label class="form-label" for="editServiceName">Nome do
+                    serviço</label>
+                    <input type="text" class="form-control" id="editServiceName" required maxlength="100">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="editServiceTime">Tempo
+                    estimado</label>
+                    <input type="text" class="form-control" id="editServiceTime" required maxlength="30">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="editServicePrice">Preço
+                    (R$)</label>
+                    <input type="number" class="form-control" id="editServicePrice" required min="0" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="editServiceImage">Imagem (URL ou
+                    caminho)</label>
+                    <input type="text" class="form-control" id="editServiceImage" maxlength="255">
+                    <div id="editServiceImagePreview" style="margin-top:10px;min-height:60px;  justify-content: center; align-items: center; display: flex"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="cancelEditService">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar
+                    Alterações</button>
+                </div>
+            </form>
+            <div id="editServiceMsg" style="margin-top:10px;font-size:0.98rem;"></div>
         </div>
     </div>
 
@@ -2354,12 +2363,12 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label class="form-label" for="dayOffDate">Selecione o
-                            dia:</label>
+                    dia:</label>
                     <input type="date" class="form-control" id="dayOffDate" min>
                 </div>
                 <div class="form-group">
                     <label class="form-label" for="dayOffReason">Motivo
-                            (opcional):</label>
+                    (opcional):</label>
                     <input type="text" class="form-control" id="dayOffReason" placeholder="Ex: Feriado, evento, etc.">
                 </div>
             </div>
@@ -2383,8 +2392,8 @@
                         <i class="fas fa-user" style="font-size: 40px; color: #aaa;"></i>
                     </div>
                     <button class="avatar-upload-btn">
-                            <i class="fas fa-camera"></i> Adicionar Foto
-                        </button>
+                    <i class="fas fa-camera"></i> Adicionar Foto
+                </button>
                     <input type="file" id="avatarInput" accept="image/*" style="display: none;">
                 </div>
 
@@ -2396,255 +2405,7 @@
             <div class="modal-footer">
                 <button class="btn btn-secondary close-modal">Cancelar</button>
                 <button class="btn btn-primary">Adicionar
-                        Profissional</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal de Edição de Horários -->
-    <div id="editWorkingHoursModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Editar Horários de Atendimento</h3>
-                <button class="close-modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <!-- Container para todos os dias da semana -->
-                <div class="working-hours-edit">
-                    <!-- Segunda-feira -->
-                    <div class="day-schedule-edit">
-                        <div class="day-header">
-                            <div class="day-title">Segunda-feira</div>
-                            <div class="day-off-toggle">
-                                <span class="day-off-label">Dia de
-                                        folga:</span>
-                                <label class="toggle-switch">
-                                        <input type="checkbox">
-                                        <span class="slider"></span>
-                                    </label>
-                            </div>
-                        </div>
-                        <div class="time-slots-edit">
-                            <div class="time-input-group">
-                                <input type="time" class="time-input" value="09:00">
-                                <span>às</span>
-                                <input type="time" class="time-input" value="12:00">
-                                <button class="remove-time-btn">
-                                        <i class="fas fa-times"></i>
-                                    </button>
-                            </div>
-                            <div class="time-input-group">
-                                <input type="time" class="time-input" value="14:00">
-                                <span>às</span>
-                                <input type="time" class="time-input" value="18:00">
-                                <button class="remove-time-btn">
-                                        <i class="fas fa-times"></i>
-                                    </button>
-                            </div>
-                        </div>
-                        <button class="add-another-btn">
-                                <i class="fas fa-plus"></i> Adicionar outro
-                                horário
-                            </button>
-                    </div>
-                    <!-- Terça-feira -->
-                    <div class="day-schedule-edit">
-                        <div class="day-header">
-                            <div class="day-title">Terça-feira</div>
-                            <div class="day-off-toggle">
-                                <span class="day-off-label">Dia de
-                                        folga:</span>
-                                <label class="toggle-switch">
-                                        <input type="checkbox">
-                                        <span class="slider"></span>
-                                    </label>
-                            </div>
-                        </div>
-                        <div class="time-slots-edit">
-                            <div class="time-input-group">
-                                <input type="time" class="time-input" value="09:00">
-                                <span>às</span>
-                                <input type="time" class="time-input" value="12:00">
-                                <button class="remove-time-btn">
-                                        <i class="fas fa-times"></i>
-                                    </button>
-                            </div>
-                            <div class="time-input-group">
-                                <input type="time" class="time-input" value="14:00">
-                                <span>às</span>
-                                <input type="time" class="time-input" value="18:00">
-                                <button class="remove-time-btn">
-                                        <i class="fas fa-times"></i>
-                                    </button>
-                            </div>
-                        </div>
-                        <button class="add-another-btn">
-                                <i class="fas fa-plus"></i> Adicionar outro
-                                horário
-                            </button>
-                    </div>
-                    <!-- Quarta-feira -->
-                    <div class="day-schedule-edit">
-                        <div class="day-header">
-                            <div class="day-title">Quarta-feira</div>
-                            <div class="day-off-toggle">
-                                <span class="day-off-label">Dia de
-                                        folga:</span>
-                                <label class="toggle-switch">
-                                        <input type="checkbox">
-                                        <span class="slider"></span>
-                                    </label>
-                            </div>
-                        </div>
-                        <div class="time-slots-edit">
-                            <div class="time-input-group">
-                                <input type="time" class="time-input" value="09:00">
-                                <span>às</span>
-                                <input type="time" class="time-input" value="12:00">
-                                <button class="remove-time-btn">
-                                        <i class="fas fa-times"></i>
-                                    </button>
-                            </div>
-                            <div class="time-input-group">
-                                <input type="time" class="time-input" value="14:00">
-                                <span>às</span>
-                                <input type="time" class="time-input" value="18:00">
-                                <button class="remove-time-btn">
-                                        <i class="fas fa-times"></i>
-                                    </button>
-                            </div>
-                        </div>
-                        <button class="add-another-btn">
-                                <i class="fas fa-plus"></i> Adicionar outro
-                                horário
-                            </button>
-                    </div>
-                    <!-- Quinta-feira -->
-                    <div class="day-schedule-edit">
-                        <div class="day-header">
-                            <div class="day-title">Quinta-feira</div>
-                            <div class="day-off-toggle">
-                                <span class="day-off-label">Dia de
-                                        folga:</span>
-                                <label class="toggle-switch">
-                                        <input type="checkbox">
-                                        <span class="slider"></span>
-                                    </label>
-                            </div>
-                        </div>
-                        <div class="time-slots-edit">
-                            <div class="time-input-group">
-                                <input type="time" class="time-input" value="09:00">
-                                <span>às</span>
-                                <input type="time" class="time-input" value="12:00">
-                                <button class="remove-time-btn">
-                                        <i class="fas fa-times"></i>
-                                    </button>
-                            </div>
-                            <div class="time-input-group">
-                                <input type="time" class="time-input" value="14:00">
-                                <span>às</span>
-                                <input type="time" class="time-input" value="18:00">
-                                <button class="remove-time-btn">
-                                        <i class="fas fa-times"></i>
-                                    </button>
-                            </div>
-                        </div>
-                        <button class="add-another-btn">
-                                <i class="fas fa-plus"></i> Adicionar outro
-                                horário
-                            </button>
-                    </div>
-                    <!-- Sexta-feira -->
-                    <div class="day-schedule-edit">
-                        <div class="day-header">
-                            <div class="day-title">Sexta-feira</div>
-                            <div class="day-off-toggle">
-                                <span class="day-off-label">Dia de
-                                        folga:</span>
-                                <label class="toggle-switch">
-                                        <input type="checkbox">
-                                        <span class="slider"></span>
-                                    </label>
-                            </div>
-                        </div>
-                        <div class="time-slots-edit">
-                            <div class="time-input-group">
-                                <input type="time" class="time-input" value="09:00">
-                                <span>às</span>
-                                <input type="time" class="time-input" value="12:00">
-                                <button class="remove-time-btn">
-                                        <i class="fas fa-times"></i>
-                                    </button>
-                            </div>
-                            <div class="time-input-group">
-                                <input type="time" class="time-input" value="14:00">
-                                <span>às</span>
-                                <input type="time" class="time-input" value="18:00">
-                                <button class="remove-time-btn">
-                                        <i class="fas fa-times"></i>
-                                    </button>
-                            </div>
-                        </div>
-                        <button class="add-another-btn">
-                                <i class="fas fa-plus"></i> Adicionar outro
-                                horário
-                            </button>
-                    </div>
-                    <!-- Sábado -->
-                    <div class="day-schedule-edit">
-                        <div class="day-header">
-                            <div class="day-title">Sábado</div>
-                            <div class="day-off-toggle">
-                                <span class="day-off-label">Dia de
-                                        folga:</span>
-                                <label class="toggle-switch">
-                                        <input type="checkbox">
-                                        <span class="slider"></span>
-                                    </label>
-                            </div>
-                        </div>
-                        <div class="time-slots-edit">
-                            <div class="time-input-group">
-                                <input type="time" class="time-input" value="09:00">
-                                <span>às</span>
-                                <input type="time" class="time-input" value="13:00">
-                                <button class="remove-time-btn">
-                                        <i class="fas fa-times"></i>
-                                    </button>
-                            </div>
-                        </div>
-                        <button class="add-another-btn">
-                                <i class="fas fa-plus"></i> Adicionar outro
-                                horário
-                            </button>
-                    </div>
-                    <!-- Domingo -->
-                    <div class="day-schedule-edit">
-                        <div class="day-header">
-                            <div class="day-title">Domingo</div>
-                            <div class="day-off-toggle">
-                                <span class="day-off-label">Dia de
-                                        folga:</span>
-                                <label class="toggle-switch">
-                                        <input type="checkbox" checked>
-                                        <span class="slider"></span>
-                                    </label>
-                            </div>
-                        </div>
-                        <div class="time-slots-edit">
-                            <!-- Domingo normalmente fechado, mas pode adicionar horários se desejar -->
-                        </div>
-                        <button class="add-another-btn">
-                                <i class="fas fa-plus"></i> Adicionar outro
-                                horário
-                            </button>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary close-modal">Cancelar</button>
-                <button class="btn btn-primary">Salvar Horários</button>
+                Profissional</button>
             </div>
         </div>
     </div>
@@ -2652,6 +2413,7 @@
     <!-- Modal de Edição de Informações da Barbearia -->
     <div id="editBarbershopInfoModal" class="modal">
         <div class="modal-content">
+
             <div class="modal-header">
                 <h3 class="modal-title">Editar Informações da Barbearia</h3>
                 <button class="close-modal">&times;</button>
@@ -2663,8 +2425,8 @@
                         <i class="fas fa-store" style="font-size: 40px; color: #aaa;"></i>
                     </div>
                     <button type="button" class="avatar-upload-btn" id="barbershop-photo-btn">
-                            <i class="fas fa-camera"></i> Adicionar Foto
-                        </button>
+                    <i class="fas fa-camera"></i> Adicionar Foto
+                </button>
                     <input type="file" id="barbershopPhotoInput" accept="image/*" style="display: none;">
                 </div>
 
@@ -2724,205 +2486,163 @@
                     <div class="tab-content" id="week-tab">
                         <div class="appointments-list">
                             <!-- Agendamentos da semana seriam listados aqui -->
-                        </div>
-                    </div>
+                        </div </div>
 
-                    <div class="tab-content" id="month-tab">
-                        <div class="appointments-list">
-                            <!-- Agendamentos do mês seriam listados aqui -->
+                        <div class="tab-content" id="month-tab">
+                            <div class="appointments-list">
+                                <!-- Agendamentos do mês seriam listados aqui -->
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary close-modal">Fechar</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal de Alterar Senha -->
-    <div id="changePasswordModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title"><i class="fas fa-key"></i> Alterar Senha
-                </h3>
-                <button class="close-modal" aria-label="Fechar">&times;</button>
-            </div>
-            <div class="modal-body">
-                <form id="changePasswordForm" autocomplete="off">
-                    <div class="form-group senha-group">
-                        <input type="password" class="form-control" id="currentPassword" placeholder="Senha atual" required>
-                        <button type="button" class="password-eye-btn" tabindex="-1" aria-label="Mostrar senha">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                    </div>
-                    <div class="form-group senha-group">
-                        <input type="password" class="form-control" id="newPassword" placeholder="Nova senha" required>
-                        <button type="button" class="password-eye-btn" tabindex="-1" aria-label="Mostrar senha">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                    </div>
-                    <div class="form-group senha-group">
-                        <input type="password" class="form-control" id="confirmPassword" placeholder="Confirmar nova senha" required>
-                        <button type="button" class="password-eye-btn" tabindex="-1" aria-label="Mostrar senha">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                    </div>
-                </form>
-                <div id="changePasswordError" style="color:var(--primary-dark);margin-top:8px;display:none;font-size:0.98rem;"></div>
-                <div id="changePasswordSuccess" style="color:var(--success);margin-top:8px;display:none;font-size:0.98rem;"></div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary close-modal" type="button">Cancelar</button>
-                <button class="btn btn-primary" type="submit" form="changePasswordForm">Salvar Nova Senha</button>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary close-modal">Fechar</button>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- Footer -->
-    <footer>
-        <div class="copyright">
-            &copy; 2025 NaRégua. Todos os direitos reservados.
-    </footer>
+        <!-- Footer -->
+        <footer>
+            <div class="copyright">
+                &copy; 2025 NaRégua. Todos os direitos reservados.
+        </footer>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-                    // Toggle theme
-                    const themeToggle = document.getElementById('themeToggle');
-                    const themeIcon = themeToggle.querySelector('i');
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                        // Toggle theme
+                        const themeToggle = document.getElementById('themeToggle');
+                        const themeIcon = themeToggle.querySelector('i');
 
-                    // Verificar preferência de tema no localStorage
-                    const currentTheme = localStorage.getItem('theme') || 'light';
-                    if (currentTheme === 'dark') {
-                        document.body.classList.add('dark-mode');
-                        themeIcon.classList.remove('fa-moon');
-                        themeIcon.classList.add('fa-sun');
-                    }
-
-                    // Alternar tema
-                    themeToggle.addEventListener('click', function() {
-                        document.body.classList.toggle('dark-mode');
-
-                        if (document.body.classList.contains('dark-mode')) {
+                        // Verificar preferência de tema no localStorage
+                        const currentTheme = localStorage.getItem('theme') || 'light';
+                        if (currentTheme === 'dark') {
+                            document.body.classList.add('dark-mode');
                             themeIcon.classList.remove('fa-moon');
                             themeIcon.classList.add('fa-sun');
-                            localStorage.setItem('theme', 'dark');
-                        } else {
-                            themeIcon.classList.remove('fa-sun');
-                            themeIcon.classList.add('fa-moon');
-                            localStorage.setItem('theme', 'light');
                         }
-                    });
 
-                    // Modal functionality
-                    const modals = document.querySelectorAll('.modal');
-                    const modalTriggers = {
-                        'editServicesBtn': 'editServicesModal',
-                        'addProfessionalBtn': 'addProfessionalModal',
-                        'editWorkingHoursBtn': 'editWorkingHoursModal',
-                        'editBarbershopInfoBtn': 'editBarbershopInfoModal',
-                        'viewAllAppointments': 'allAppointmentsModal',
-                        'addDayOffBtn': 'addDayOffModal',
-                        'changePasswordBtn': 'changePasswordModal',
-                        'viewPushHistoryBtn': 'pushHistoryModal'
-                    };
+                        // Alternar tema
+                        themeToggle.addEventListener('click', function() {
+                            document.body.classList.toggle('dark-mode');
 
-                    // Open modals
-                    Object.keys(modalTriggers).forEach(triggerId => {
-                        const trigger = document.getElementById(triggerId);
-                        const modalId = modalTriggers[triggerId];
-                        const modal = document.getElementById(modalId);
+                            if (document.body.classList.contains('dark-mode')) {
+                                themeIcon.classList.remove('fa-moon');
+                                themeIcon.classList.add('fa-sun');
+                                localStorage.setItem('theme', 'dark');
+                            } else {
+                                themeIcon.classList.remove('fa-sun');
+                                themeIcon.classList.add('fa-moon');
+                                localStorage.setItem('theme', 'light');
+                            }
+                        });
 
-                        if (trigger && modal) {
-                            trigger.addEventListener('click', () => {
-                                modal.style.display = 'flex';
+                        // Modal functionality
+                        const modals = document.querySelectorAll('.modal');
+                        const modalTriggers = {
+                            'addProfessionalBtn': 'addProfessionalModal',
+                            'editBarbershopInfoBtn': 'editBarbershopInfoModal',
+                            'viewAllAppointments': 'allAppointmentsModal',
+                            'addDayOffBtn': 'addDayOffModal',
+                            'changePasswordBtn': 'changePasswordModal',
+                            'viewPushHistoryBtn': 'pushHistoryModal'
+                        };
+
+                        // Open modals
+                        Object.keys(modalTriggers).forEach(triggerId => {
+                            const trigger = document.getElementById(triggerId);
+                            const modalId = modalTriggers[triggerId];
+                            const modal = document.getElementById(modalId);
+
+                            if (trigger && modal) {
+                                trigger.addEventListener('click', () => {
+                                    modal.style.display = 'flex';
+                                });
+                            }
+                        });
+
+                        // Close modals
+                        document.querySelectorAll('.close-modal').forEach(closeBtn => {
+                            closeBtn.addEventListener('click', function() {
+                                const modal = this.closest('.modal');
+                                modal.style.display = 'none';
+                            });
+                        });
+
+                        // Close when clicking outside modal content
+                        modals.forEach(modal => {
+                            modal.addEventListener('click', function(e) {
+                                if (e.target === modal) {
+                                    modal.style.display = 'none';
+                                }
+                            });
+                        });
+
+                        // Tab functionality
+                        document.querySelectorAll('.tab').forEach(tab => {
+                            tab.addEventListener('click', function() {
+                                const tabContainer = this.closest('.tab-container');
+                                const tabId = this.getAttribute('data-tab');
+
+                                // Remove active class from all tabs and contents
+                                tabContainer.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                                tabContainer.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+                                // Add active class to clicked tab and corresponding content
+                                this.classList.add('active');
+                                document.getElementById(`${tabId}-tab`).classList.add('active');
+                            });
+                        });
+
+                        // Avatar upload preview
+                        const avatarInput = document.getElementById('avatarInput');
+                        const avatarPreview = document.querySelector('.avatar-preview');
+
+                        if (avatarInput && avatarPreview) {
+                            document.querySelector('.avatar-upload-btn').addEventListener('click', function() {
+                                avatarInput.click();
+                            });
+
+                            avatarInput.addEventListener('change', function(e) {
+                                const file = e.target.files[0];
+                                if (file) {
+                                    const reader = new FileReader();
+                                    reader.onload = function(event) {
+                                        avatarPreview.innerHTML = `<img src="${event.target.result}" alt="Preview">`;
+                                    };
+                                    reader.readAsDataURL(file);
+                                }
                             });
                         }
-                    });
 
-                    // Close modals
-                    document.querySelectorAll('.close-modal').forEach(closeBtn => {
-                        closeBtn.addEventListener('click', function() {
-                            const modal = this.closest('.modal');
-                            modal.style.display = 'none';
-                        });
-                    });
+                        // Avatar upload preview para foto do estabelecimento
+                        const barbershopPhotoInput = document.getElementById('barbershopPhotoInput');
+                        const barbershopPhotoBtn = document.getElementById('barbershop-photo-btn');
+                        const barbershopPhotoPreview = document.getElementById('barbershop-photo-preview');
 
-                    // Close when clicking outside modal content
-                    modals.forEach(modal => {
-                        modal.addEventListener('click', function(e) {
-                            if (e.target === modal) {
-                                modal.style.display = 'none';
-                            }
-                        });
-                    });
+                        if (barbershopPhotoInput && barbershopPhotoBtn && barbershopPhotoPreview) {
+                            barbershopPhotoBtn.addEventListener('click', function() {
+                                barbershopPhotoInput.click();
+                            });
 
-                    // Tab functionality
-                    document.querySelectorAll('.tab').forEach(tab => {
-                        tab.addEventListener('click', function() {
-                            const tabContainer = this.closest('.tab-container');
-                            const tabId = this.getAttribute('data-tab');
+                            barbershopPhotoInput.addEventListener('change', function(e) {
+                                const file = e.target.files[0];
+                                if (file) {
+                                    const reader = new FileReader();
+                                    reader.onload = function(event) {
+                                        barbershopPhotoPreview.innerHTML = `<img src="${event.target.result}" alt="Preview">`;
+                                    };
+                                    reader.readAsDataURL(file);
+                                }
+                            });
+                        }
 
-                            // Remove active class from all tabs and contents
-                            tabContainer.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                            tabContainer.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-
-                            // Add active class to clicked tab and corresponding content
-                            this.classList.add('active');
-                            document.getElementById(`${tabId}-tab`).classList.add('active');
-                        });
-                    });
-
-                    // Avatar upload preview
-                    const avatarInput = document.getElementById('avatarInput');
-                    const avatarPreview = document.querySelector('.avatar-preview');
-
-                    if (avatarInput && avatarPreview) {
-                        document.querySelector('.avatar-upload-btn').addEventListener('click', function() {
-                            avatarInput.click();
-                        });
-
-                        avatarInput.addEventListener('change', function(e) {
-                            const file = e.target.files[0];
-                            if (file) {
-                                const reader = new FileReader();
-                                reader.onload = function(event) {
-                                    avatarPreview.innerHTML = `<img src="${event.target.result}" alt="Preview">`;
-                                };
-                                reader.readAsDataURL(file);
-                            }
-                        });
-                    }
-
-                    // Avatar upload preview para foto do estabelecimento
-                    const barbershopPhotoInput = document.getElementById('barbershopPhotoInput');
-                    const barbershopPhotoBtn = document.getElementById('barbershop-photo-btn');
-                    const barbershopPhotoPreview = document.getElementById('barbershop-photo-preview');
-
-                    if (barbershopPhotoInput && barbershopPhotoBtn && barbershopPhotoPreview) {
-                        barbershopPhotoBtn.addEventListener('click', function() {
-                            barbershopPhotoInput.click();
-                        });
-
-                        barbershopPhotoInput.addEventListener('change', function(e) {
-                            const file = e.target.files[0];
-                            if (file) {
-                                const reader = new FileReader();
-                                reader.onload = function(event) {
-                                    barbershopPhotoPreview.innerHTML = `<img src="${event.target.result}" alt="Preview">`;
-                                };
-                                reader.readAsDataURL(file);
-                            }
-                        });
-                    }
-
-                    // Add another time slot
-                    document.querySelectorAll('.add-another-btn').forEach(btn => {
-                        btn.addEventListener('click', function() {
-                            const timeSlotsEdit = this.previousElementSibling;
-                            const newTimeInputGroup = document.createElement('div');
-                            newTimeInputGroup.className = 'time-input-group';
-                            newTimeInputGroup.innerHTML = `
+                        // Add another time slot
+                        document.querySelectorAll('.add-another-btn').forEach(btn => {
+                            btn.addEventListener('click', function() {
+                                const timeSlotsEdit = this.previousElementSibling;
+                                const newTimeInputGroup = document.createElement('div');
+                                newTimeInputGroup.className = 'time-input-group';
+                                newTimeInputGroup.innerHTML = `
                         <input type="time" class="time-input" value="09:00">
                         <span>às</span>
                         <input type="time" class="time-input" value="12:00">
@@ -2930,74 +2650,74 @@
                             <i class="fas fa-times"></i>
                         </button>
                     `;
-                            timeSlotsEdit.appendChild(newTimeInputGroup);
+                                timeSlotsEdit.appendChild(newTimeInputGroup);
 
-                            // Add event listener to new remove button
-                            newTimeInputGroup.querySelector('.remove-time-btn').addEventListener('click', function() {
+                                // Add event listener to new remove button
+                                newTimeInputGroup.querySelector('.remove-time-btn').addEventListener('click', function() {
+                                    this.parentElement.remove();
+                                });
+                            });
+                        });
+
+                        // Remove time slot
+                        document.querySelectorAll('.remove-time-btn').forEach(btn => {
+                            btn.addEventListener('click', function() {
                                 this.parentElement.remove();
                             });
                         });
-                    });
 
-                    // Remove time slot
-                    document.querySelectorAll('.remove-time-btn').forEach(btn => {
-                        btn.addEventListener('click', function() {
-                            this.parentElement.remove();
-                        });
-                    });
+                        // Compartilhar link de agendamento moderno melhorado
+                        const copyBtn = document.getElementById('copyBookingLinkBtn');
+                        const bookingLink = document.getElementById('bookingLink');
+                        const globalCopyMsg = document.getElementById('globalCopySuccessMsg');
 
-                    // Compartilhar link de agendamento moderno melhorado
-                    const copyBtn = document.getElementById('copyBookingLinkBtn');
-                    const bookingLink = document.getElementById('bookingLink');
-                    const globalCopyMsg = document.getElementById('globalCopySuccessMsg');
+                        if (copyBtn && bookingLink && globalCopyMsg) {
+                            copyBtn.addEventListener('click', function() {
+                                bookingLink.select();
+                                bookingLink.setSelectionRange(0, 99999); // Para mobile
+                                document.execCommand('copy');
+                                globalCopyMsg.style.display = 'flex';
+                                setTimeout(() => {
+                                    globalCopyMsg.style.display = 'none';
+                                }, 1800);
+                            });
+                        }
 
-                    if (copyBtn && bookingLink && globalCopyMsg) {
-                        copyBtn.addEventListener('click', function() {
-                            bookingLink.select();
-                            bookingLink.setSelectionRange(0, 99999); // Para mobile
-                            document.execCommand('copy');
-                            globalCopyMsg.style.display = 'flex';
-                            setTimeout(() => {
-                                globalCopyMsg.style.display = 'none';
-                            }, 1800);
-                        });
-                    }
+                        // Modal de adicionar dia de folga especial
+                        const addDayOffModal = document.getElementById('addDayOffModal');
+                        const saveDayOffBtn = document.getElementById('saveDayOffBtn');
+                        const dayOffDate = document.getElementById('dayOffDate');
+                        const dayOffReason = document.getElementById('dayOffReason');
+                        const specialDaysOffList = document.getElementById('specialDaysOffList');
+                        const specialDayOffEmpty = document.getElementById('specialDayOffEmpty');
 
-                    // Modal de adicionar dia de folga especial
-                    const addDayOffModal = document.getElementById('addDayOffModal');
-                    const saveDayOffBtn = document.getElementById('saveDayOffBtn');
-                    const dayOffDate = document.getElementById('dayOffDate');
-                    const dayOffReason = document.getElementById('dayOffReason');
-                    const specialDaysOffList = document.getElementById('specialDaysOffList');
-                    const specialDayOffEmpty = document.getElementById('specialDayOffEmpty');
+                        // Setar data mínima para hoje
+                        if (dayOffDate) {
+                            const today = new Date();
+                            const yyyy = today.getFullYear();
+                            const mm = String(today.getMonth() + 1).padStart(2, '0');
+                            const dd = String(today.getDate()).padStart(2, '0');
+                            dayOffDate.min = `${yyyy}-${mm}-${dd}`;
+                        }
 
-                    // Setar data mínima para hoje
-                    if (dayOffDate) {
-                        const today = new Date();
-                        const yyyy = today.getFullYear();
-                        const mm = String(today.getMonth() + 1).padStart(2, '0');
-                        const dd = String(today.getDate()).padStart(2, '0');
-                        dayOffDate.min = `${yyyy}-${mm}-${dd}`;
-                    }
+                        // Adicionar dia de folga especial
+                        if (saveDayOffBtn && dayOffDate && specialDaysOffList) {
+                            saveDayOffBtn.addEventListener('click', function() {
+                                        const date = dayOffDate.value;
+                                        const reason = dayOffReason.value.trim();
+                                        if (!date) {
+                                            dayOffDate.focus();
+                                            return;
+                                        }
 
-                    // Adicionar dia de folga especial
-                    if (saveDayOffBtn && dayOffDate && specialDaysOffList) {
-                        saveDayOffBtn.addEventListener('click', function() {
-                                    const date = dayOffDate.value;
-                                    const reason = dayOffReason.value.trim();
-                                    if (!date) {
-                                        dayOffDate.focus();
-                                        return;
-                                    }
+                                        // Formatar data para dd/mm/yyyy
+                                        const [yyyy, mm, dd] = date.split('-');
+                                        const formattedDate = `${dd}/${mm}/${yyyy}`;
 
-                                    // Formatar data para dd/mm/yyyy
-                                    const [yyyy, mm, dd] = date.split('-');
-                                    const formattedDate = `${dd}/${mm}/${yyyy}`;
-
-                                    // Criar item visual
-                                    const item = document.createElement('div');
-                                    item.className = 'special-day-off-item';
-                                    item.innerHTML = `
+                                        // Criar item visual
+                                        const item = document.createElement('div');
+                                        item.className = 'special-day-off-item';
+                                        item.innerHTML = `
                         <div>
                             <span class="special-day-off-date"><i class="fas fa-calendar-day"></i> ${formattedDate}</span>
                             ${reason ? `<span class="special-day-off-reason">(${reason})</span>` : ''}
@@ -3024,216 +2744,10 @@
                 });
             }
 
-            // Galeria de seleção de imagem para novo serviço
-            document.querySelectorAll('.service-gallery').forEach(gallery => {
-                gallery.addEventListener('click', function(e) {
-                    const option = e.target.closest('.gallery-option');
-                    if (option) {
-                        gallery.querySelectorAll('.gallery-option').forEach(opt => opt.classList.remove('selected'));
-                        option.classList.add('selected');
-                        // Aqui você pode salvar o valor de option.dataset.img para uso posterior
-                    }
-                });
-            });
-
             // Logout functionality
             document.getElementById('logoutBtn').addEventListener('click', function() {
                 window.location.href = '/dashboard/logout';
             });
-
-            // Abrir modal de alterar senha
-            document.getElementById('changePasswordBtn').addEventListener('click', function() {
-                document.getElementById('changePasswordModal').style.display = 'flex';
-                // Limpa campos e mensagens
-                document.getElementById('changePasswordForm').reset();
-                document.getElementById('changePasswordError').style.display = 'none';
-            });
-
-            // Fechar modal de alterar senha (usando já o padrão dos outros modais)
-            document.querySelectorAll('#changePasswordModal .close-modal').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    document.getElementById('changePasswordModal').style.display = 'none';
-                });
-            });
-            document.getElementById('changePasswordModal').addEventListener('click', function(e) {
-                if (e.target === this) this.style.display = 'none';
-            });
-
-            // Validação e feedback do formulário
-            document.getElementById('changePasswordForm').addEventListener('submit', async function(e) {
-                e.preventDefault();
-                const current = document.getElementById('currentPassword').value.trim();
-                const nova = document.getElementById('newPassword').value.trim();
-                const confirma = document.getElementById('confirmPassword').value.trim();
-                const error = document.getElementById('changePasswordError');
-                const success = document.getElementById('changePasswordSuccess');
-                error.style.display = 'none';
-                success.style.display = 'none';
-
-                if (nova.length < 6) {
-                    error.textContent = 'A nova senha deve ter pelo menos 6 caracteres.';
-                    error.style.display = 'block';
-                    return;
-                }
-                if (nova !== confirma) {
-                    error.textContent = 'As senhas não coincidem.';
-                    error.style.display = 'block';
-                    return;
-                }
-
-                // Chamada para o backend
-                try {
-                    const res = await fetch('/dashboard/alterar-senha', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ atual: current, nova })
-                    });
-                    const data = await res.json();
-                    if (data.success) {
-                        success.textContent = data.message;
-                        success.style.display = 'block';
-                        setTimeout(() => {
-                            document.getElementById('changePasswordModal').style.display = 'none';
-                        }, 1200);
-                    } else {
-                        error.textContent = data.message || 'Erro ao alterar senha.';
-                        error.style.display = 'block';
-                    }
-                } catch (err) {
-                    error.textContent = 'Erro ao conectar ao servidor.';
-                    error.style.display = 'block';
-                }
-            });
-            // Push Notification Form
-const pushForm = document.getElementById('pushNotificationForm');
-const pushTitle = document.getElementById('pushTitle');
-const pushMessage = document.getElementById('pushMessage');
-const pushMessageCount = document.getElementById('pushMessageCount');
-const pushUrl = document.getElementById('pushUrl');
-const pushStatus = document.getElementById('pushNotificationStatus');
-const recipientAll = document.getElementById('recipientAll');
-const recipientToday = document.getElementById('recipientToday');
-const recipientWeek = document.getElementById('recipientWeek');
-
-// Atualiza contador de caracteres da mensagem
-if (pushMessage && pushMessageCount) {
-    pushMessage.addEventListener('input', function() {
-        pushMessageCount.textContent = `${this.value.length}/180`;
-    });
-}
-
-// Lógica de seleção de destinatários (ao menos um)
-if (recipientAll && recipientToday && recipientWeek) {
-    function ensureAtLeastOneRecipient(e) {
-        if (!recipientAll.checked && !recipientToday.checked && !recipientWeek.checked) {
-            e.target.checked = true;
-        }
-    }
-    recipientAll.addEventListener('change', ensureAtLeastOneRecipient);
-    recipientToday.addEventListener('change', ensureAtLeastOneRecipient);
-    recipientWeek.addEventListener('change', ensureAtLeastOneRecipient);
-}
-
-// Histórico de notificações (simulado localStorage)
-function getPushHistory() {
-    return JSON.parse(localStorage.getItem('pushHistory') || '[]');
-}
-function savePushHistory(history) {
-    localStorage.setItem('pushHistory', JSON.stringify(history));
-}
-
-// Envio do formulário de notificação
-if (pushForm) {
-    pushForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        pushStatus.style.display = 'none';
-
-        // Validação simples
-        if (!pushTitle.value.trim() || !pushMessage.value.trim()) {
-            pushStatus.textContent = 'Preencha título e mensagem.';
-            pushStatus.style.color = 'var(--red)';
-            pushStatus.style.display = 'inline';
-            return;
-        }
-
-        // Simulação de envio (aqui você integraria com backend/push real)
-        pushStatus.textContent = 'Enviando...';
-        pushStatus.style.color = 'var(--gold)';
-        pushStatus.style.display = 'inline';
-
-        setTimeout(() => {
-            // Salva no histórico local
-            const history = getPushHistory();
-            history.unshift({
-                title: pushTitle.value.trim(),
-                message: pushMessage.value.trim(),
-                url: pushUrl.value.trim(),
-                recipients: [
-                    recipientAll.checked ? 'Todos' : null,
-                    recipientToday.checked ? 'Hoje' : null,
-                    recipientWeek.checked ? 'Semana' : null
-                ].filter(Boolean).join(', '),
-                date: new Date().toLocaleString('pt-BR')
-            });
-            savePushHistory(history);
-
-            pushStatus.textContent = 'Notificação enviada!';
-            pushStatus.style.color = 'var(--green)';
-            pushStatus.style.display = 'inline';
-
-            // Limpa campos
-            pushForm.reset();
-            pushMessageCount.textContent = '0/180';
-
-            setTimeout(() => {
-                pushStatus.style.display = 'none';
-            }, 1800);
-        }, 900);
-    });
-}
-
-// Modal de histórico de notificações
-const pushHistoryBtn = document.getElementById('viewPushHistoryBtn');
-const pushHistoryModal = document.getElementById('pushHistoryModal');
-const pushHistoryList = document.getElementById('pushHistoryList');
-
-if (pushHistoryBtn && pushHistoryModal && pushHistoryList) {
-    pushHistoryBtn.addEventListener('click', function() {
-        // Preenche histórico
-        const history = getPushHistory();
-        pushHistoryList.innerHTML = '';
-        if (history.length === 0) {
-            pushHistoryList.innerHTML = '<div style="color:var(--gray);text-align:center;padding:18px 0;">Nenhuma notificação enviada ainda.</div>';
-        } else {
-            history.forEach(item => {
-                pushHistoryList.innerHTML += `
-                    <div class="push-history-item">
-                        <div class="push-history-title">${item.title}</div>
-                        <div class="push-history-message">${item.message}</div>
-                        <div class="push-history-meta">
-                            <span><i class="fas fa-users"></i> ${item.recipients}</span>
-                            ${item.url ? `<a href="${item.url}" class="push-history-link" target="_blank"><i class="fas fa-link"></i> Link</a>` : ''}
-                            <span class="push-history-date"><i class="far fa-clock"></i> ${item.date}</span>
-                        </div>
-                    </div>
-                `;
-            });
-        }
-        pushHistoryModal.style.display = 'flex';
-    });
-}
-
-// Fecha modal de histórico
-if (pushHistoryModal) {
-    pushHistoryModal.querySelectorAll('.close-modal').forEach(btn => {
-        btn.addEventListener('click', function() {
-            pushHistoryModal.style.display = 'none';
-        });
-    });
-    pushHistoryModal.addEventListener('click', function(e) {
-        if (e.target === pushHistoryModal) pushHistoryModal.style.display = 'none';
-    });
-}
 
 // Atualiza o contador de agendamentos totais
 function atualizarTotalAgendamentos() {
@@ -3289,16 +2803,17 @@ function carregarAgendamentosHoje() {
                     data.agendamentos.forEach(ag => {
                         const item = document.createElement('div');
                         item.className = 'appointment-item';
-                        item.innerHTML = `
-                            <div class="appointment-info">
-                                <div class="appointment-client">${ag.nome ? ag.nome : 'Cliente'}</div>
-                                <div class="appointment-details">
-                                    <span><i class="far fa-clock"></i> ${ag.hora}</span>
-                                    <span><i class="fas fa-cut"></i> ${ag.servico}</span>
-                                    <span><i class="fas fa-user"></i> ${ag.profissional}</span>
-                                    <span class="appointment-status status-confirmed">Confirmado</span>
-                                </div>
-                            </div>
+item.innerHTML = `
+    <div class="appointment-info">
+        <div class="appointment-client">${ag.nome ? ag.nome : 'Cliente'}</div>
+        <div class="appointment-details">
+            <span><i class="far fa-calendar-alt"></i> ${ag.data ? new Date(ag.data).toLocaleDateString('pt-BR') : '-'}</span>
+            <span><i class="far fa-clock"></i> ${ag.hora}</span>
+            <span><i class="fas fa-cut"></i> ${ag.servico}</span>
+            <span><i class="fas fa-user"></i> ${ag.profissional}</span>
+            <span class="appointment-status status-confirmed">Confirmado</span>
+        </div>
+    </div>
                         `;
                         container.appendChild(item);
                     });
@@ -3327,7 +2842,7 @@ const sections = [
     {section: 'horarios', selector: '.dashboard-section:nth-of-type(5)'},
     {section: 'folgas', selector: '.dashboard-section:nth-of-type(6)'},
     {section: 'barbearia', selector: '.dashboard-section:nth-of-type(7)'},
-    {section: 'notificacoes', selector: ''},
+    {section: 'notificacoes', selector: '#notificacoes-section'},
     {section: 'compartilhar', selector: '.dashboard-section:nth-of-type(4)'},
 ];
 function showSection(sectionName) {
@@ -3372,12 +2887,14 @@ document.querySelectorAll('.password-eye-btn').forEach(btn => {
 const filterBtns = document.querySelectorAll('.filter-btn');
 const filteredAppointmentsList = document.getElementById('filteredAppointmentsList');
 
+// ...existing code...
 function fetchAppointments(filter) {
     let url = '';
     if (filter === 'today') url = '/dashboard/agendamentos-hoje';
     else if (filter === 'week') url = '/dashboard/agendamentos-semana';
     else if (filter === 'month') url = '/dashboard/agendamentos-mes';
 
+    const filteredAppointmentsList = document.getElementById('filteredAppointmentsList');
     filteredAppointmentsList.innerHTML = '<div style="padding:18px 0;text-align:center;color:var(--primary-dark);">Carregando...</div>';
 
     fetch(url)
@@ -3385,31 +2902,104 @@ function fetchAppointments(filter) {
         .then(data => {
             let ags = data.agendamentos || [];
             if (ags.length === 0) {
-                filteredAppointmentsList.innerHTML = `<div style="color:var(--text-secondary);padding:18px 0;text-align:center;">Nenhum agendamento encontrado.</div>`;
+                filteredAppointmentsList.innerHTML = `<div style="color:var(--gray-dark);padding:18px 0;text-align:center;">Nenhum agendamento encontrado.</div>`;
                 return;
             }
-            filteredAppointmentsList.innerHTML = '';
+            // Agrupa por data
+            const grupos = {};
             ags.forEach(ag => {
-                const item = document.createElement('div');
-                item.className = 'appointment-item';
-                item.innerHTML = `
-                    <div class="appointment-info">
-                        <span class="appointment-client"><i class="fas fa-user"></i> ${ag.nome || 'Cliente'}</span>
-                        <div class="appointment-details">
-                            <span><i class="far fa-clock"></i> ${ag.hora || '--:--'}</span>
-                            <span><i class="fas fa-cut"></i> ${ag.servico || '-'}</span>
-                            <span><i class="fas fa-user-tie"></i> ${ag.profissional || '-'}</span>
-                            <span><i class="fas fa-phone"></i> ${ag.telefone || '-'}</span>
-                            <span class="appointment-status status-confirmed">Confirmado</span>
+                const dataStr = ag.data;
+                if (!grupos[dataStr]) grupos[dataStr] = [];
+                grupos[dataStr].push(ag);
+            });
+            const datasOrdenadas = Object.keys(grupos).sort();
+
+            filteredAppointmentsList.innerHTML = '';
+            const dias = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
+            datasOrdenadas.forEach(dataStr => {
+                // Cabeçalho do dia
+                const dataObj = new Date(dataStr);
+                const header = document.createElement('div');
+                header.className = 'dia-header';
+                header.innerHTML = `<h3 style="margin:18px 0 8px 0;font-size:1.1em;color:var(--primary-dark);">${dias[dataObj.getDay()]}, ${dataObj.toLocaleDateString('pt-BR')}</h3>`;
+                filteredAppointmentsList.appendChild(header);
+
+                // Lista de agendamentos do dia
+                grupos[dataStr].forEach(ag => {
+                    const item = document.createElement('div');
+                    item.className = 'appointment-item';
+                    item.innerHTML = `
+                        <div class="appointment-info">
+                            <span class="appointment-client"><i class="fas fa-user"></i> ${ag.nome || 'Cliente'}</span>
+                            <div class="appointment-details">
+                                <span><i class="far fa-clock"></i> ${ag.hora || '--:--'}</span>
+                                <span><i class="fas fa-cut"></i> ${ag.servico || '-'}</span>
+                                <span><i class="fas fa-user-tie"></i> ${ag.profissional || '-'}</span>
+                                <span><i class="fas fa-phone"></i> ${ag.telefone || '-'}</span>
+                                <span class="appointment-status status-confirmed">Confirmado</span>
+                            </div>
                         </div>
-                    </div>
-                `;
-                filteredAppointmentsList.appendChild(item);
+                    `;
+                    filteredAppointmentsList.appendChild(item);
+                });
             });
         })
         .catch(() => {
             filteredAppointmentsList.innerHTML = `<div style="color:var(--red);padding:18px 0;text-align:center;">Erro ao carregar agendamentos.</div>`;
         });
+}
+// ...existing code...
+
+// Função para obter o nome do dia da semana em português
+function diaSemanaExtenso(dataStr) {
+    const dias = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
+    const data = new Date(dataStr);
+    return dias[data.getDay()];
+}
+
+// Função para agrupar agendamentos por data
+function agruparPorData(agendamentos) {
+    const grupos = {};
+    agendamentos.forEach(ag => {
+        const data = ag.data;
+        if (!grupos[data]) grupos[data] = [];
+        grupos[data].push(ag);
+    });
+    return grupos;
+}
+
+// Função para renderizar os agendamentos agrupados por dia
+function renderAgendamentosAgrupados(agendamentos) {
+    const container = document.getElementById('lista-agendamentos');
+    container.innerHTML = '';
+    const grupos = agruparPorData(agendamentos);
+    const datasOrdenadas = Object.keys(grupos).sort();
+
+    datasOrdenadas.forEach(dataStr => {
+        // Cabeçalho do dia
+        const header = document.createElement('div');
+        header.className = 'dia-header';
+        header.innerHTML = `<h3>${diaSemanaExtenso(dataStr)}, ${new Date(dataStr).toLocaleDateString('pt-BR')}</h3>`;
+        container.appendChild(header);
+
+        // Lista de agendamentos do dia
+        grupos[dataStr].forEach(ag => {
+            const item = document.createElement('div');
+            item.className = 'appointment-item';
+            item.innerHTML = `
+                <div class="appointment-info">
+                    <div class="appointment-client">${ag.nome ? ag.nome : 'Cliente'}</div>
+                    <div class="appointment-details">
+                        <span><i class="far fa-clock"></i> ${ag.hora}</span>
+                        <span><i class="fas fa-cut"></i> ${ag.servico}</span>
+                        <span><i class="fas fa-user"></i> ${ag.profissional}</span>
+                        <span class="appointment-status status-confirmed">Confirmado</span>
+                    </div>
+                </div>
+            `;
+            container.appendChild(item);
+        });
+    });
 }
 
 // Filtro inicial: hoje
@@ -3424,8 +3014,701 @@ filterBtns.forEach(btn => {
     });
 });
 
+// Função para renderizar os serviços na dashboard
+   async function renderDashboardServices() {
+    const container = document.getElementById('servicesContainer');
+    if (!container) return;
+    container.innerHTML = '<div style="padding:18px 0;text-align:center;color:var(--primary-dark);">Carregando...</div>';
+    try {
+        const res = await fetch('/dashboard/servicos-admin');
+        const data = await res.json();
+        if (data.success && Array.isArray(data.servicos)) {
+            if (data.servicos.length === 0) {
+                container.innerHTML = '<div style="color:var(--primary-dark);padding:18px 0;text-align:center;">Nenhum serviço cadastrado.</div>';
+                return;
+            }
+            let html = '';
+            data.servicos.forEach(servico => {
+                html += `
+                <div class="service-card" data-id="${servico.id}">
+    <div class="service-card-header">
+        <div class="service-switch-title">
+            <label class="toggle-switch" style="margin-right:10px;">
+                <input type="checkbox" class="service-switch" ${servico.ativo ? 'checked' : ''} data-id="${servico.id}">
+                <span class="slider"></span>
+            </label>
+            <span class="service-card-name">${servico.nome}</span>
+        </div>
+        <div class="service-actions">
+            <button class="service-action-btn edit-btn" title="Editar serviço" data-id="${servico.id}" data-nome="${servico.nome}" data-tempo="${servico.tempo}" data-preco="${servico.preco}" data-imagem="${servico.imagem || ''}">
+                <i class="fas fa-pen"></i>
+            </button>
+            <button class="service-action-btn delete-btn" title="Excluir serviço" data-id="${servico.id}">
+                <i class="fas fa-trash"></i>
+            </button>
+        </div>
+    </div>
+    <div class="service-card-details">
+        <span><i class="far fa-clock"></i> ${servico.tempo}</span>
+        <span><i class="fas fa-dollar-sign"></i> R$ ${Number(servico.preco).toFixed(2).replace('.', ',')}</span>
+    </div>
+</div>
+                `;
+            });
+            container.innerHTML = html;
+
+            // Adiciona evento aos switches
+            container.querySelectorAll('.service-switch').forEach(switchEl => {
+                switchEl.addEventListener('change', async function() {
+                    const id = this.getAttribute('data-id');
+                    const ativo = this.checked ? 1 : 0;
+                    await fetch(`/dashboard/servicos/${id}/ativo`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ ativo })
+                    });
+                });
+            });
+
+            // Eventos dos botões de editar e deletar
+            container.querySelectorAll('.service-action-btn.edit-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    openEditServiceModal({
+                        id: btn.dataset.id,
+                        nome: btn.dataset.nome,
+                        tempo: btn.dataset.tempo,
+                        preco: btn.dataset.preco,
+                        imagem: btn.dataset.imagem
+                    });
+                });
+            });
+            container.querySelectorAll('.service-action-btn.delete-btn').forEach(btn => {
+                btn.addEventListener('click', async function() {
+                    const id = this.getAttribute('data-id');
+                    if (confirm('Tem certeza que deseja excluir este serviço?')) {
+                        await fetch(`/dashboard/servicos/${id}`, {
+                            method: 'DELETE'
+                        });
+                        renderDashboardServices();
+                    }
+                });
+            });
+        } else {
+            container.innerHTML = '<div style="color:var(--primary-dark);padding:18px 0;text-align:center;">Erro ao carregar serviços.</div>';
+        }
+    } catch (err) {
+        container.innerHTML = '<div style="color:var(--primary-dark);padding:18px 0;text-align:center;">Erro ao carregar serviços.</div>';
+    }
+}
+
+    // Chama ao carregar a página
+    renderDashboardServices();
+
+    // MODAL DE EDIÇÃO DE SERVIÇO
+    const editServiceModal = document.getElementById('editServiceModal');
+    const closeEditServiceModal = document.getElementById('closeEditServiceModal');
+    const cancelEditService = document.getElementById('cancelEditService');
+    const editServiceForm = document.getElementById('editServiceForm');
+    const editServiceMsg = document.getElementById('editServiceMsg');
+
+    function openEditServiceModal(servico) {
+        document.getElementById('editServiceId').value = servico.id;
+        document.getElementById('editServiceName').value = servico.nome;
+        document.getElementById('editServiceTime').value = servico.tempo;
+        document.getElementById('editServicePrice').value = servico.preco;
+        document.getElementById('editServiceImage').value = servico.imagem || '';
+        editServiceMsg.textContent = '';
+        editServiceModal.style.display = 'flex';
+    }
+    function closeEditModal() {
+        editServiceModal.style.display = 'none';
+    }
+    closeEditServiceModal.onclick = closeEditModal;
+    cancelEditService.onclick = closeEditModal;
+    editServiceModal.onclick = function(e) {
+        if (e.target === editServiceModal) closeEditModal();
+    };
+
+    // Evento do botão de editar
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('.service-action-btn.edit-btn')) {
+            const btn = e.target.closest('.service-action-btn.edit-btn');
+            openEditServiceModal({
+                id: btn.dataset.id,
+                nome: btn.dataset.nome,
+                tempo: btn.dataset.tempo,
+                preco: btn.dataset.preco,
+                imagem: btn.dataset.imagem
+            });
+        }
+    });
+
+    // Submissão do formulário de edição
+    editServiceForm.onsubmit = async function(e) {
+        e.preventDefault();
+        editServiceMsg.textContent = '';
+        const id = document.getElementById('editServiceId').value;
+        const nome = document.getElementById('editServiceName').value.trim();
+        const tempo = document.getElementById('editServiceTime').value.trim();
+        const preco = document.getElementById('editServicePrice').value;
+        const imagem = document.getElementById('editServiceImage').value.trim();
+
+        if (!nome || !tempo || !preco) {
+            editServiceMsg.textContent = 'Preencha todos os campos obrigatórios.';
+            return;
+        }
+        try {
+const res = await fetch(`/dashboard/servicos/${id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ nome, tempo, preco, imagem })
+});
+            const data = await res.json();
+            if (res.ok && data.success) {
+                editServiceMsg.style.color = 'var(--success)';
+                editServiceMsg.textContent = 'Serviço atualizado com sucesso!';
+                setTimeout(() => {
+                    closeEditModal();
+                    renderDashboardServices();
+                }, 900);
+            } else {
+                editServiceMsg.style.color = 'var(--primary-dark)';
+                editServiceMsg.textContent = data.message || 'Erro ao atualizar serviço.';
+            }
+        } catch (err) {
+            editServiceMsg.style.color = 'var(--primary-dark)';
+            editServiceMsg.textContent = 'Erro ao conectar ao servidor.';
+        }
+    };
+
+    // Evento do botão de excluir
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('.service-action-btn.delete-btn')) {
+            const btn = e.target.closest('.service-action-btn.delete-btn');
+            const id = btn.dataset.id;
+            if (confirm('Tem certeza que deseja excluir este serviço?')) {
+fetch(`/dashboard/servicos/${id}`, { method: 'DELETE' })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        renderDashboardServices();
+                    } else {
+                        alert(data.message || 'Erro ao excluir serviço.');
+                    }
+                })
+                .catch(() => alert('Erro ao conectar ao servidor.'));
+            }
+        }
+    });
+
+    // Abrir modal de adicionar serviço
+const addServiceBtn = document.getElementById('addServiceBtn');
+const addServiceModal = document.getElementById('addServiceModal');
+const closeAddServiceModal = document.getElementById('closeAddServiceModal');
+const addServiceForm = document.getElementById('addServiceForm');
+const addServiceMsg = document.getElementById('addServiceMsg');
+
+if (addServiceBtn && addServiceModal) {
+    addServiceBtn.addEventListener('click', function(e) {
+        e.stopPropagation(); // Impede propagação para não fechar o modal
+        addServiceModal.style.display = 'flex';
+        addServiceMsg.textContent = '';
+        addServiceForm.reset();
+    });
+}
+if (closeAddServiceModal && addServiceModal) {
+    closeAddServiceModal.addEventListener('click', function() {
+        addServiceModal.style.display = 'none';
+    });
+}
+if (addServiceModal) {
+    addServiceModal.addEventListener('click', function(e) {
+        if (e.target === addServiceModal) addServiceModal.style.display = 'none';
+    });
+}
+
+    // Submissão do formulário de novo serviço
+    if (addServiceForm) {
+        addServiceForm.onsubmit = async function(e) {
+            e.preventDefault();
+            addServiceMsg.textContent = '';
+            const nome = document.getElementById('addServiceName').value.trim();
+            const tempo = document.getElementById('addServiceTime').value.trim();
+            const preco = document.getElementById('addServicePrice').value;
+            const imagem = document.getElementById('addServiceImage').value.trim();
+
+            if (!nome || !tempo || !preco) {
+                addServiceMsg.style.color = 'var(--primary-dark)';
+                addServiceMsg.textContent = 'Preencha todos os campos obrigatórios.';
+                return;
+            }
+            try {
+                const res = await fetch('/dashboard/servicos', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ nome, tempo, preco, imagem })
+                });
+                const data = await res.json();
+                if (res.ok && data.success) {
+                    addServiceMsg.style.color = 'var(--success)';
+                    addServiceMsg.textContent = 'Serviço adicionado com sucesso!';
+                    setTimeout(() => {
+                        addServiceModal.style.display = 'none';
+                        if (typeof renderDashboardServices === 'function') renderDashboardServices();
+                    }, 900);
+                } else {
+                    addServiceMsg.style.color = 'var(--primary-dark)';
+                    addServiceMsg.textContent = data.message || 'Erro ao adicionar serviço.';
+                }
+            } catch (err) {
+                addServiceMsg.style.color = 'var(--primary-dark)';
+                addServiceMsg.textContent = 'Erro ao conectar ao servidor.';
+            }
+        };
+    }
+    // Modal de alterar senha
+const changePasswordBtn = document.getElementById('changePasswordBtn');
+const changePasswordModal = document.getElementById('changePasswordModal');
+const cancelBtn = document.querySelector('#changePasswordModal .btn.btn-secondary[type="button"]');
+const closeChangePasswordBtns = changePasswordModal ? changePasswordModal.querySelectorAll('.close-modal') : [];
+const changePasswordForm = document.getElementById('changePasswordForm');
+const changePasswordError = document.getElementById('changePasswordError');
+const changePasswordSuccess = document.getElementById('changePasswordSuccess');
+
+if (cancelBtn && changePasswordModal) {
+    cancelBtn.addEventListener('click', function() {
+        changePasswordModal.style.display = 'none';
+    });
+}
+
+// Abrir modal
+if (changePasswordBtn && changePasswordModal) {
+    changePasswordBtn.addEventListener('click', function() {
+        changePasswordModal.style.display = 'flex';
+        changePasswordForm.reset();
+        changePasswordError.style.display = 'none';
+        changePasswordSuccess.style.display = 'none';
+    });
+}
+
+document.querySelectorAll('#changePasswordModal .password-eye-btn').forEach(btn => {
+    btn.addEventListener('click', function () {
+        const input = this.parentElement.querySelector('input');
+        if (input.type === 'password') {
+            input.type = 'text';
+            this.querySelector('i').classList.remove('fa-eye');
+            this.querySelector('i').classList.add('fa-eye-slash');
+        } else {
+            input.type = 'password';
+            this.querySelector('i').classList.remove('fa-eye-slash');
+            this.querySelector('i').classList.add('fa-eye');
+        }
+    });
+});
+
+// Fechar modal
+closeChangePasswordBtns.forEach(btn => {
+    btn.addEventListener('click', function() {
+        changePasswordModal.style.display = 'none';
+    });
+});
+if (changePasswordModal) {
+    changePasswordModal.addEventListener('click', function(e) {
+        if (e.target === changePasswordModal) changePasswordModal.style.display = 'none';
+    });
+}
+
+// Mostrar/ocultar senha
+changePasswordModal?.querySelectorAll('.password-eye-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        const input = this.parentNode.querySelector('input');
+        if (input.type === 'password') {
+            input.type = 'text';
+            this.firstElementChild.classList.remove('fa-eye');
+            this.firstElementChild.classList.add('fa-eye-slash');
+        } else {
+            input.type = 'password';
+            this.firstElementChild.classList.remove('fa-eye-slash');
+            this.firstElementChild.classList.add('fa-eye');
+        }
+    });
+});
+
+// Submissão do formulário de alteração de senha
+if (changePasswordForm) {
+    changePasswordForm.onsubmit = async function(e) {
+        e.preventDefault();
+        changePasswordError.style.display = 'none';
+        changePasswordSuccess.style.display = 'none';
+
+        const atual = document.getElementById('currentPassword').value.trim();
+        const nova = document.getElementById('newPassword').value.trim();
+        const confirmar = document.getElementById('confirmPassword').value.trim();
+
+        if (!atual || !nova || !confirmar) {
+            changePasswordError.textContent = 'Preencha todos os campos.';
+            changePasswordError.style.display = 'block';
+            return;
+        }
+        if (nova !== confirmar) {
+            changePasswordError.textContent = 'As senhas não coincidem.';
+            changePasswordError.style.display = 'block';
+            return;
+        }
+        if (nova.length < 4) {
+            changePasswordError.textContent = 'A senha deve ter pelo menos 4 caracteres.';
+            changePasswordError.style.display = 'block';
+            return;
+        }
+        try {
+            const res = await fetch('/dashboard/alterar-senha', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ atual, nova })
+            });
+            const data = await res.json();
+            if (res.ok && data.success) {
+                changePasswordSuccess.textContent = data.message || 'Senha alterada com sucesso!';
+                changePasswordSuccess.style.display = 'block';
+                setTimeout(() => {
+                    changePasswordModal.style.display = 'none';
+                }, 1200);
+            } else {
+                changePasswordError.textContent = data.message || 'Erro ao alterar senha.';
+                changePasswordError.style.display = 'block';
+            }
+        } catch (err) {
+            changePasswordError.textContent = 'Erro ao conectar ao servidor.';
+            changePasswordError.style.display = 'block';
+        }
+    };
+}
+
+// Preview da imagem no modal de adicionar serviço
+const addServiceImageInput = document.getElementById('addServiceImage');
+const addServiceImagePreview = document.getElementById('addServiceImagePreview');
+if (addServiceImageInput && addServiceImagePreview) {
+    function updateAddServicePreview() {
+        const url = addServiceImageInput.value.trim();
+        if (url) {
+            addServiceImagePreview.innerHTML = `<img src="${url}" alt="Pré-visualização" style="max-width:100%;max-height:80px;border-radius:8px;box-shadow:0 1px 6px #0001;">`;
+        } else {
+            addServiceImagePreview.innerHTML = '';
+        }
+    }
+    addServiceImageInput.addEventListener('input', updateAddServicePreview);
+    // Limpa preview ao abrir modal
+    addServiceBtn?.addEventListener('click', () => { addServiceImagePreview.innerHTML = ''; });
+}
+
+// Preview da imagem no modal de editar serviço
+const editServiceImageInput = document.getElementById('editServiceImage');
+const editServiceImagePreview = document.getElementById('editServiceImagePreview');
+if (editServiceImageInput && editServiceImagePreview) {
+    function updateEditServicePreview() {
+        const url = editServiceImageInput.value.trim();
+        if (url) {
+            editServiceImagePreview.innerHTML = `<img src="${url}" alt="Pré-visualização" style="max-width:100%;max-height:80px;border-radius:8px;box-shadow:0 1px 6px #0001;">`;
+        } else {
+            editServiceImagePreview.innerHTML = '';
+        }
+    }
+    editServiceImageInput.addEventListener('input', updateEditServicePreview);
+    // Atualiza preview ao abrir modal de edição
+    function setEditServicePreviewOnOpen() {
+        updateEditServicePreview();
+    }
+    if (typeof openEditServiceModal === 'function') {
+        const originalOpenEditServiceModal = openEditServiceModal;
+        window.openEditServiceModal = function(servico) {
+            originalOpenEditServiceModal(servico);
+            setTimeout(updateEditServicePreview, 50);
+        };
+    }
+}
+
+// Enviar notificação push manual
+const pushForm = document.getElementById('pushForm');
+if (pushForm) {
+    pushForm.onsubmit = async function(e) {
+        e.preventDefault();
+        const title = document.getElementById('title').value.trim();
+        const body = document.getElementById('body').value.trim();
+        const msgDiv = document.getElementById('msg');
+        msgDiv.textContent = 'Enviando...';
+        try {
+            const res = await fetch('/push/manual', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ title, body })
+            });
+            const data = await res.json();
+            if (data.success) {
+                msgDiv.textContent = `Notificação enviada para ${data.enviados} inscritos.`;
+            } else {
+                msgDiv.textContent = 'Erro: ' + (data.message || 'Falha ao enviar.');
+            }
+        } catch (err) {
+            msgDiv.textContent = 'Erro de conexão ou servidor.';
+        }
+    };
+}
+
+async function carregarHorariosSemana() {
+    const res = await fetch('/dashboard/horarios-semana');
+    const data = await res.json();
+    if (data.success) {
+        data.horarios.forEach(h => {
+            const input = document.querySelector(`[data-dia="${h.dia_semana}"]`);
+            if (input) input.value = h.horario;
         });
-    </script>
+    }
+}
+
+async function salvarHorarioSemana(dia, horario) {
+    await fetch('/dashboard/horarios-semana', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ dia_semana: dia, horario })
+    });
+}
+
+// Exemplo: ao salvar um campo
+document.querySelectorAll('.input-horario-semana').forEach(input => {
+    input.addEventListener('change', function() {
+        const dia = this.getAttribute('data-dia');
+        salvarHorarioSemana(dia, this.value);
+    });
+});
+
+// Horários da semana
+const diasSemana = [
+    { key: 'segunda', label: 'Segunda-feira' },
+    { key: 'terca', label: 'Terça-feira' },
+    { key: 'quarta', label: 'Quarta-feira' },
+    { key: 'quinta', label: 'Quinta-feira' },
+    { key: 'sexta', label: 'Sexta-feira' },
+    { key: 'sabado', label: 'Sábado' },
+    { key: 'domingo', label: 'Domingo' }
+];
+
+let turnosSemana = []; // [{dia_semana, turno_inicio, turno_fim}, ...]
+
+const horarioModal = document.getElementById('horarioModal');
+const closeHorarioModal = document.getElementById('closeHorarioModal');
+const horarioForm = document.getElementById('horarioForm');
+const modalDiaSemana = document.getElementById('modalDiaSemana');
+const modalHorarioTitle = document.getElementById('modalHorarioTitle');
+const turnosContainer = document.getElementById('turnosContainer');
+const addTurnoBtn = document.getElementById('addTurnoBtn');
+
+// Render cards dos dias (exemplo)
+function renderHorariosSemana() {
+    workingHoursGrid.innerHTML = '';
+    diasSemana.forEach(dia => {
+        const turnos = turnosSemana.filter(t => t.dia_semana === dia.key);
+        workingHoursGrid.innerHTML += `
+        <div class="day-schedule" style="background-color: var(--gray-light); border-radius: 12px; padding: 18px 18px 14px 18px; box-shadow: 0 2px 10px rgba(0,0,0,0.04); border: 1.5px solid var(--primary-light); min-width: 0; position: relative;">
+            <div class="day-header" style="display:flex;align-items:center;justify-content:space-between;">
+                <div style="display:flex;align-items:center;gap:10px;">
+                    <i class="fas fa-calendar-day" style="color:#888;font-size:1.1rem;"></i>
+                    <div class="day-title">${dia.label}</div>
+                </div>
+                <button class="edit-btn" data-dia="${dia.key}" title="Editar horários" style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:var(--gray);border:none;border-radius:50%;box-shadow:0 1px 4px rgba(0,0,0,0.04);transition:background 0.2s;">
+                    <i class="fas fa-pen" style="color:#FFD700;font-size:1.1rem;"></i>
+                </button>
+            </div>
+            <div class="time-slots" style="margin-top:10px;">
+                ${turnos.length === 0
+                    ? '<span class="time-slot" style="color:#e74c3c;font-weight:bold;">Fechado</span>'
+                    : turnos.map(t => `<span class="time-slot">${t.turno_inicio.slice(0,5)} - ${t.turno_fim.slice(0,5)}</span>`).join('')}
+            </div>
+        </div>
+        `;
+    });
+    document.querySelectorAll('.edit-btn').forEach(btn => {
+        btn.onclick = () => abrirModalHorario(btn.getAttribute('data-dia'));
+    });
+}
+
+// Modal: abrir para editar/adicionar turnos
+function abrirModalHorario(diaKey) {
+    modalDiaSemana.value = diaKey;
+    modalHorarioTitle.textContent = `Editar horários de ${diasSemana.find(d => d.key === diaKey).label}`;
+    turnosContainer.innerHTML = '';
+    const turnos = turnosSemana.filter(t => t.dia_semana === diaKey);
+    if (turnos.length === 0) addTurnoRow(); // Se não houver, adiciona um turno vazio
+    else turnos.forEach(t => addTurnoRow(t.turno_inicio, t.turno_fim));
+    horarioModal.style.display = 'flex';
+}
+
+// Adiciona um campo de turno ao modal
+function addTurnoRow(inicio = '', fim = '') {
+    const row = document.createElement('div');
+    row.className = 'turno-row';
+    row.innerHTML = `
+        <input type="time" class="turno-inicio" value="${inicio}" required>
+        <span>às</span>
+        <input type="time" class="turno-fim" value="${fim}" required>
+        <button type="button" class="remove-turno-btn" title="Remover turno"><i class="fas fa-trash"></i></button>
+    `;
+    row.querySelector('.remove-turno-btn').onclick = () => {
+        row.remove();
+        if (turnosContainer.childElementCount === 0) addTurnoRow();
+    };
+    turnosContainer.appendChild(row);
+}
+
+// Botão para adicionar turno
+addTurnoBtn.onclick = () => addTurnoRow();
+
+// Fechar modal
+closeHorarioModal.onclick = () => { horarioModal.style.display = 'none'; };
+window.onclick = function(event) {
+    if (event.target === horarioModal) horarioModal.style.display = 'none';
+};
+const fecharDiaBtn = document.createElement('button');
+fecharDiaBtn.type = 'button';
+fecharDiaBtn.className = 'btn fechar-dia-btn';
+fecharDiaBtn.innerHTML = '<i class="fas fa-lock"></i> Fechar dia';
+
+const abrirDiaBtn = document.createElement('button');
+abrirDiaBtn.type = 'button';
+abrirDiaBtn.className = 'btn abrir-dia-btn';
+abrirDiaBtn.innerHTML = '<i class="fas fa-unlock"></i> Abrir dia';
+
+// ...dentro da função abrirModalHorario(diaKey) substitua o conteúdo do modal...
+function abrirModalHorario(diaKey) {
+    modalDiaSemana.value = diaKey;
+    modalHorarioTitle.textContent = `Editar horários de ${diasSemana.find(d => d.key === diaKey).label}`;
+    turnosContainer.innerHTML = '';
+
+    // Verifica se o dia está fechado (sem turnos e flag especial)
+    const turnos = turnosSemana.filter(t => t.dia_semana === diaKey);
+    const diaFechado = turnos.length === 0 || (turnos.length === 1 && turnos[0].fechado);
+
+    // Limpa botões antigos
+    fecharDiaBtn.remove();
+    abrirDiaBtn.remove();
+
+    if (diaFechado) {
+        // Dia fechado: mostra botão "Abrir dia"
+        turnosContainer.innerHTML = `
+            <div class="dia-fechado-msg animate-fade-in">
+                <i class="fas fa-lock" style="color:#e74c3c;font-size:2rem;margin-bottom:8px;"></i>
+                <div style="color:#e74c3c;font-weight:600;font-size:1.1rem;">Fechado</div>
+                <div style="color:var(--gray-dark);font-size:0.95rem;margin-top:4px;">Nenhum horário disponível neste dia.</div>
+            </div>
+        `;
+        turnosContainer.parentNode.insertBefore(abrirDiaBtn, turnosContainer.nextSibling);
+    } else {
+        // Dia aberto: mostra horários e botão "Fechar dia"
+        turnos.forEach(t => addTurnoRow(t.turno_inicio, t.turno_fim));
+        if (turnos.length === 0) addTurnoRow();
+        turnosContainer.parentNode.insertBefore(fecharDiaBtn, turnosContainer.nextSibling);
+    }
+    horarioModal.style.display = 'flex';
+
+    // Evento para fechar o dia
+    fecharDiaBtn.onclick = () => {
+        turnosContainer.innerHTML = `
+            <div class="dia-fechado-msg animate-fade-in">
+                <i class="fas fa-lock" style="color:#e74c3c;font-size:2rem;margin-bottom:8px;"></i>
+                <div style="color:#e74c3c;font-weight:600;font-size:1.1rem;">Fechado</div>
+                <div style="color:var(--gray-dark);font-size:0.95rem;margin-top:4px;">Nenhum horário disponível neste dia.</div>
+            </div>
+        `;
+        turnosSemana = turnosSemana.filter(t => t.dia_semana !== diaKey);
+        turnosSemana.push({ dia_semana: diaKey, fechado: true });
+        fecharDiaBtn.remove();
+        turnosContainer.parentNode.insertBefore(abrirDiaBtn, turnosContainer.nextSibling);
+    };
+
+    // Evento para abrir o dia
+    abrirDiaBtn.onclick = () => {
+        turnosSemana = turnosSemana.filter(t => !(t.dia_semana === diaKey && t.fechado));
+        turnosContainer.innerHTML = '';
+        addTurnoRow();
+        abrirDiaBtn.remove();
+        turnosContainer.parentNode.insertBefore(fecharDiaBtn, turnosContainer.nextSibling);
+    };
+}
+
+// ...no onsubmit do horarioForm, ajuste para salvar corretamente...
+horarioForm.onsubmit = async function(e) {
+    e.preventDefault();
+    const dia_semana = modalDiaSemana.value;
+    let turnos = [];
+    // Se o dia está fechado, salva como fechado
+    if (turnosContainer.textContent.includes('Fechado')) {
+        turnos = [{ fechado: true }];
+    } else {
+        turnosContainer.querySelectorAll('.turno-row').forEach(row => {
+            const inicio = row.querySelector('.turno-inicio').value;
+            const fim = row.querySelector('.turno-fim').value;
+            if (inicio && fim) turnos.push({ inicio, fim });
+        });
+    }
+    await fetch('/dashboard/horarios-turnos', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ dia_semana, turnos })
+    });
+    await carregarHorariosTurnos();
+    horarioModal.style.display = 'none';
+};
+
+// ...no carregarHorariosTurnos, ajuste para considerar o flag fechado...
+async function carregarHorariosTurnos() {
+    const res = await fetch('/dashboard/horarios-turnos');
+    const data = await res.json();
+    if (data.success) {
+        // Se vier [{dia_semana, fechado:true}], trata como fechado
+        turnosSemana = data.turnos.map(t => {
+            if (t.fechado) return { dia_semana: t.dia_semana, fechado: true };
+            return t;
+        });
+        renderHorariosSemana();
+    }
+}
+
+// Salvar turnos do dia
+horarioForm.onsubmit = async function(e) {
+    e.preventDefault();
+    const dia_semana = modalDiaSemana.value;
+    const turnos = [];
+    turnosContainer.querySelectorAll('.turno-row').forEach(row => {
+        const inicio = row.querySelector('.turno-inicio').value;
+        const fim = row.querySelector('.turno-fim').value;
+        if (inicio && fim) turnos.push({ inicio, fim });
+    });
+    await fetch('/dashboard/horarios-turnos', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ dia_semana, turnos })
+    });
+    await carregarHorariosTurnos();
+    horarioModal.style.display = 'none';
+};
+
+// Carregar turnos do backend
+async function carregarHorariosTurnos() {
+    const res = await fetch('/dashboard/horarios-turnos');
+    const data = await res.json();
+    if (data.success) {
+        turnosSemana = data.turnos;
+        renderHorariosSemana();
+    }
+}
+
+// Inicialização
+if (document.getElementById('horarios-section')) {
+    carregarHorariosTurnos();
+}
+        });
+        </script>
 </body>
 
 </html>
