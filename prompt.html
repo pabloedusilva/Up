@@ -1,10 +1,39 @@
-na minha #file:dashboard.html tem uma sessão de "Horários de Atendimento" que fica na parte de "Horários". E no meu #file:index.html tem uma parte que exibe os horários disponivel em cada dia da semana(no caso todos os dias estão exibindo o mesmo horários) mas quero "remover isso de ficar mostrando os horários com o html e javascript" ou seja ao invés de mostrar os horários da maneira como está, no caso de forma com o js, quero que ele mostre de acordo com o banco de dados:
+#codebase #file:index.html
 
-"CREATE TABLE IF NOT EXISTS horarios_turnos (
-id INT AUTO_INCREMENT PRIMARY KEY,
-dia_semana ENUM('segunda','terca','quarta','quinta','sexta','sabado','domingo') NOT NULL,
-turno_inicio TIME NOT NULL,
-turno_fim TIME NOT NULL
-);"
+por que quando eu aperto em "Confirmar agendamento" no container de "Confirmar agendamento" mesmo que eu tenha preenhido tudo (Serviço, Profissional, Data, Horário, Valor) ele não está agendando?
 
-tipo assim se eu colocar na minha dashboard na parte de "Horários de Atendimento", que por exemplo, na Segunda feira vou atender de 07:00 às 12:00 e 14:00 âs 21:00, no index, nas parte que mostra os horários disponíveis, quero que mostre os horários desses turnos no caso seria então "07:00, 07:10, 07:20, 07:30 ... até as 12:00 e depois os horários de 14:00, 14:10 ... 21:00. Deixe perfeito e 100% funcional seguindo meu padrão de estilo sem mudar minha estrutura e estilo, deixe tudo perfeito e funcionando sem alterar as outras funcionalidas.
+' <section class="confirmation-section animate-fade-in" id="confirmation-section">
+            <h2 class="section-title"><i class="fas fa-check-circle"></i> Confirmar agendamento</h2>
+
+            <div class="confirmation-details">
+                <div class="detail-row">
+                    <div class="detail-label">Serviço:</div>
+                    <div class="detail-value" id="confirm-service">Barba</div>
+                </div>
+
+                <div class="detail-row">
+                    <div class="detail-label">Profissional:</div>
+                    <div class="detail-value" id="confirm-professional">Pablo barber</div>
+                </div>
+
+                <div class="detail-row">
+                    <div class="detail-label">Data:</div>
+                    <div class="detail-value" id="confirm-date">07/05/2025</div>
+                </div>
+
+                <div class="detail-row">
+                    <div class="detail-label">Horário:</div>
+                    <div class="detail-value" id="confirm-time">09:30</div>
+                </div>
+
+                <div class="detail-row">
+                    <div class="detail-label">Valor:</div>
+                    <div class="detail-value" id="confirm-price">R$ 20,00
+                    </div>
+                </div>
+            </div>
+
+            <button class="confirm-button animate-pulse">Confirmar
+                    Agendamento</button>
+        </section>'
+quando eu aperto em confirmar agendamento mesmo com todas as coisas preenchidas (Serviço, Profissional, Data, Horário, Valor), quando eu perto ele abre um modal mandando eu preencher todas as informações "Por favor, complete todas as informações para agendar." e não está confirmando meu agendamento, pois parece que nem tudo está sendo preenchido corretamente.
